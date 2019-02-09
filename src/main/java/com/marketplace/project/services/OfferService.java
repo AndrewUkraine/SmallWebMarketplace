@@ -51,6 +51,8 @@ public class OfferService {
         offerRepository.delete(entity);
     }
 
+
+
     public void deleteAll(Iterable<? extends Offer> entities) {
         offerRepository.deleteAll(entities);
     }

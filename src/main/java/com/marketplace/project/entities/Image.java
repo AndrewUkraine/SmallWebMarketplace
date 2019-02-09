@@ -1,12 +1,8 @@
 package com.marketplace.project.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "image")
@@ -20,8 +16,12 @@ public class Image {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     private Offer imageOffer;
+
+    public Image() {
+    }
+
 
     public Integer getId() {
         return id;

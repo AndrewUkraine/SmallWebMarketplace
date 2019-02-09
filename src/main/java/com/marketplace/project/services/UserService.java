@@ -71,6 +71,10 @@ public class UserService {
         return userRepository.findByCity(city);
     }
 
+//    public User getWithOffers(int id) {
+//        return userRepository.getWithOffers(id);
+//    }
+
 //    public void refresh(User user) {
 //        userRepository.refresh(user);
 //    }

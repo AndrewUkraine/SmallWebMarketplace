@@ -10,5 +10,6 @@ public interface UserRepositoryCustom {
 
     List<User> findByCity(String city);
 
+
 //    void refresh(User user);
 }
