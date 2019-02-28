@@ -1,19 +1,7 @@
 package com.marketplace.project.entities;
 
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +27,7 @@ public class User {
     @Column(name = "CITY", length = 60)
     private String city;
 
+    @Enumerated(EnumType.STRING)
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -130,4 +119,6 @@ public class User {
     public void setPurchasedItems(List<Offer> purchasedItems) {
         this.purchasedItems = purchasedItems;
     }
+
+
 }

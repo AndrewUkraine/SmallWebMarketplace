@@ -4,19 +4,19 @@ import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Category;
 import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.User;
 import com.marketplace.project.entities.enums.CategoryTypes;
+import com.marketplace.project.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Controller
-@RequestMapping(value = "/offer")
+//@RequestMapping(value = "/offers")
 public class OfferController {
 
     @Autowired
@@ -25,96 +25,79 @@ public class OfferController {
     @Autowired
     private OfferRepository offerRepository;
 
+    @Autowired
+    private CategoryService categoryService;
+
+
     //delete Offer by Id
    // @ResponseBody - get JSON if REST
+//        RedirectAttributes attributes
+//        attributes.addAttribute("massage", id + "- offer was deleted!");
 
+    //delete offer
+    @RequestMapping("offer/delete/{id}")
+    public String deleteOfferById(@PathVariable Integer id, Model model) {
+        offerRepository.deleteById(id);
+       model.addAttribute("offers", offerRepository.findAll());
+       return "redirect:/offers";
+    }
 
-//    @GetMapping(path = "/{id}")
-//    public
-//    void deleteOfferById(@PathVariable Integer id) {
-//        offerRepository.deleteById(id);
-//    }
-
-    //New Offer
-//    @GetMapping(path = "/new-offer")
-//    public
-//    String addNewOffer(@RequestParam String condition, @RequestParam String description, @RequestParam BigDecimal price, @RequestParam Boolean status, @RequestParam String title, @RequestParam User sellerId, Model model) {
-//
-//        Offer offer = new Offer();
-//        Category category1 = new Category();
-//
-//        offer.setCondition(condition);
-//        offer.getCreationTimeAndDate();
-//        offer.setOfferDescription(description);
-//        offer.setPrice(price);
-//        offer.setStatus(status);
-//        offer.setTitle(title);
-//
-//        offer.setSeller(sellerId);
-//
-//        offerRepository.save(offer);
-//        return "offersbyid";
-//    }
-
-
-
-    @RequestMapping(path = "/new-offer", method = RequestMethod.GET)
+    //add new Offer
+    @RequestMapping("offer/new")
     public
-    String addNewOffer() {
+    String addNewOffer(Model model) {
+        model.addAttribute("offer", new Offer());
+        model.addAttribute("category", CategoryTypes.values());
         return "addOffer";
     }
 
-    @PostMapping(path = "/save")
-    public
-    String addNewOffer(@ModelAttribute Offer offer, Model model) {
-        offerRepository.save(offer);
-        model.addAttribute("offers", offerRepository.findAll());
-        return "offersbyid";
+    // save offer
+    @RequestMapping(value = "offer", method = RequestMethod.POST)
+    public String saveOffer (@ModelAttribute Offer offer, Category category) {
+
+        category.setCategory(category.getCategory());
+       categoryService.save(category);
+       offer.setCategory(category);
+
+        LocalDateTime today = LocalDateTime.now();
+
+
+            offer.setCreationTimeAndDate(today);
+            offerRepository.save(offer);
+            return "redirect:/offers";
+
     }
 
     //get All Offers
-    @GetMapping(path = "/alloffers")
-    public
-    String getAllOffers(Model model) {
+    @RequestMapping(value = "/offers", method = RequestMethod.GET)
+    public String getAllOffers(Model model) {
         model.addAttribute("offers", offerRepository.findAll());
-        return "offersbyid";
+        return "offers";
     }
 
 
-    //update Offer
-    @PutMapping(path = "/upd-offer/{id}")
-    public ResponseEntity<Object> updOffer(@RequestBody Offer offer, Integer id) {
-
-        Optional<Offer> offerOptional = offerRepository.findById(id);
-
-        if (!offerOptional.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-        offer.setId(id);
-        offerRepository.save(offer);
-        return ResponseEntity.noContent().build();
+    // edit offer
+    @GetMapping(value = "offer/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model) {
+        model.addAttribute("offer", offerRepository.findById(id));
+        return "offer";
     }
-
-
 
 
     //find all offer by seller id
     @GetMapping(value = "/offers/{id}")
     public String findAllOfferBySellerId (@PathVariable int id, Model model) {
-
         model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(id)));
-        return "bhb";
+        return "offers";
 
     }
 
 
     //find all offer by title
     @GetMapping(path = "/title/{title}")
-    public
-    Iterable<Offer> findOfferByTitle(@PathVariable String title) {
-        Iterable<Offer> offers = offerRepository.findByTitle(title);
-        return offers;
-
+    public String findOfferByTitle(@PathVariable String title) {
+       offerRepository.findByTitle(title);
+        return "offers";
     }
 
 //get ENUM
@@ -124,6 +107,6 @@ public class OfferController {
         model.addAttribute("category", CategoryTypes.values());
 
 
-        return "offersbyid";
+        return "offers";
     }
 }

@@ -16,12 +16,21 @@ public class Image {
     @Column(name = "NAME")
     private String name;
 
+
+    @Lob
+    private byte[] data;
+
     @ManyToOne (fetch = FetchType.EAGER)
     private Offer imageOffer;
 
     public Image() {
     }
 
+    public Image(String name, byte[] data, Offer imageOffer) {
+        this.name = name;
+        this.data = data;
+        this.imageOffer = imageOffer;
+    }
 
     public Integer getId() {
         return id;
@@ -53,5 +62,13 @@ public class Image {
 
     public void setImageOffer(Offer imageOffer) {
         this.imageOffer = imageOffer;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }

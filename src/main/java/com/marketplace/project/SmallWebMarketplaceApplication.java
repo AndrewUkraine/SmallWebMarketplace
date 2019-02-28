@@ -22,9 +22,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -49,14 +51,13 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
     @Autowired
     UserRoleService userRoleService;
 
+    @Bean
+    public Java8TimeDialect java8TimeDialect() {
+        return new Java8TimeDialect();
+    }
+
     public static void main(String[] args) {
-
         ApplicationContext appCtx = SpringApplication.run(SmallWebMarketplaceApplication.class, args);
-
-
-//        for (String name: appCtx.getBeanDefinitionNames()) {
-//            System.out.println(name);
-//        }
     }
 
 
@@ -80,6 +81,7 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
         category5.setCategory(CategoryTypes.SPORTING_GOODS.getCategoryType());
 
         categoryService.save(category);
+        categoryService.save(category5);
 
 
         //*******************************************//
@@ -139,7 +141,7 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
         Offer offer1 = new Offer();
         offer1.setCategory(category);
         offer1.setCondition("New");
-        offer1.getCreationTimeAndDate();
+        offer1.setCreationTimeAndDate(LocalDateTime.now());
         offer1.setBuyer(user2);
         offer1.setSeller(user1);
         offer1.setStatus(true);
@@ -158,9 +160,9 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
         //*******************************************//
 
         Offer offer2 = new Offer();
-        offer2.setCategory(category);
+        offer2.setCategory(category5);
         offer2.setCondition("Used");
-        offer2.getCreationTimeAndDate();
+        offer2.setCreationTimeAndDate(LocalDateTime.now());
         offer2.setBuyer(user1);
         offer2.setSeller(user2);
         offer2.setStatus(true);

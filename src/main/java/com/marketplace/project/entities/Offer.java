@@ -1,13 +1,19 @@
 package com.marketplace.project.entities;
 
-import com.marketplace.project.DateTimeUtil;
-import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,13 +35,13 @@ public class Offer {
     private Boolean status;
 
     @Column(name = "`CREATION_TIME`", nullable = false)
-    //@DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
-    //@Temporal(TemporalType.DATE)
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    @CreationTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime creationTimeAndDate;
 
     @ManyToOne
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
@@ -98,6 +104,7 @@ public class Offer {
         this.status = status;
     }
 
+
     public LocalDateTime getCreationTimeAndDate() {
         return creationTimeAndDate;
     }
@@ -112,6 +119,43 @@ public class Offer {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "created")
+    private Date created;
+
+
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "updated")
+    private Date updated;
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public List<Image> getImages() {
@@ -137,4 +181,6 @@ public class Offer {
     public void setBuyer(User buyer) {
         this.buyer = buyer;
     }
+
+
 }

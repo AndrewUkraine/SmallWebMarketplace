@@ -2,59 +2,58 @@ package com.marketplace.project.services;
 
 import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.entities.Image;
+import com.marketplace.project.entities.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ImageService {
 
+    @Autowired
     private ImageRepository imageRepository;
 
-    @Autowired
-    public ImageService(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
+    private Offer imageOffer;
+
+    public Offer getImageOffer() {
+        return imageOffer;
     }
 
-    public List<Image> findAllById(Iterable<Integer> integers) {
-        return imageRepository.findAllById(integers);
+    public void setImageOffer(Offer imageOffer) {
+        this.imageOffer = imageOffer;
     }
 
-    public <S extends Image> List<S> saveAll(Iterable<S> entities) {
-        return imageRepository.saveAll(entities);
+    public Image storeFile(MultipartFile file) throws IOException {
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+            // Check if the file's name contains invalid characters
+            if(fileName.contains("..")) {
+                throw new IOException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            Image image = new Image();
+
+            return imageRepository.save(image);
+        } catch (IOException ex) {
+            throw new IOException("Could not store file " + fileName + ". Please try again!", ex);
+        }
     }
 
-    public void deleteInBatch(Iterable<Image> entities) {
-        imageRepository.deleteInBatch(entities);
+    public Image getFile(Integer id) throws IOException {
+        return imageRepository.findById(id)
+                .orElseThrow(() -> new IOException("File not found with id " + id));
     }
+
 
     public <S extends Image> S save(S entity) {
         return imageRepository.save(entity);
     }
 
-    public Optional<Image> findById(Integer integer) {
-        return imageRepository.findById(integer);
-    }
-
-    public boolean existsById(Integer integer) {
-        return imageRepository.existsById(integer);
-    }
-
-    public long count() {
-        return imageRepository.count();
-    }
-
-    public void deleteById(Integer integer) {
-        imageRepository.deleteById(integer);
-    }
-
-    public void delete(Image entity) {
-        imageRepository.delete(entity);
-    }
-
-    public void deleteAll(Iterable<? extends Image> entities) {
-        imageRepository.deleteAll(entities);
-    }
 }
