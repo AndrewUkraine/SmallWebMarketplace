@@ -13,7 +13,15 @@
 <div class="container">
 
     <form action="#" th:action="@{/offer}" th:object="${offer}" method="post">
-        <p>Condition: <input type="text" th:field="*{condition}" /></p>
+
+
+        <select th:field="*{condition}">
+            <option th:each="con : ${conditions}"
+                    th:value="${con}"
+                    th:text="${con}">
+            </option>
+        </select>
+
         <p>Description: <input type="text" th:field="*{offerDescription}" /></p>
         <p>Price: <input type="text" th:field="*{price}" /></p>
         <p>Titile: <input type="text" th:field="*{title}" /></p>

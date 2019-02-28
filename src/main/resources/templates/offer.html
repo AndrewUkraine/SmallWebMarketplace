@@ -15,14 +15,12 @@
 
 <div class="container">
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Condition:</label>
-                <div class="col-sm-10">
-                    <label>
-                        <input type="text" name="condition" class="form-control" th:value="${offer.get().condition}"/>
-                    </label>
-                </div>
-            </div>
+    <select th:field="*{condition}">
+        <option th:each="con : ${conditions}"
+                th:value="${con}"
+                th:text="${con}">
+        </option>
+    </select>
 
 
         <div class="form-group">
