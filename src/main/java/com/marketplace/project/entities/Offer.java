@@ -1,18 +1,15 @@
 package com.marketplace.project.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.marketplace.project.entities.enums.ConditionType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +27,8 @@ public class Offer {
     @Column(name = "`DESCRIPTION`", length = 1000)
     private String offerDescription;
     @Column(name = "`CONDITION`", length = 30)
-    private String condition;
+    @Enumerated(EnumType.STRING)
+    private ConditionType condition;
     @Column(name = "`STATUS`", length = 30)
     private Boolean status;
 
@@ -88,11 +86,11 @@ public class Offer {
         this.offerDescription = offerDescription;
     }
 
-    public String getCondition() {
+    public ConditionType getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(ConditionType condition) {
         this.condition = condition;
     }
 

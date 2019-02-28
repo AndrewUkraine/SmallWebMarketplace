@@ -2,18 +2,15 @@ package com.marketplace.project.controllers;
 
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
-import com.marketplace.project.entities.Category;
 import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.enums.CategoryTypes;
+import com.marketplace.project.entities.enums.ConditionType;
 import com.marketplace.project.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Controller
 //@RequestMapping(value = "/offers")
@@ -45,19 +42,18 @@ public class OfferController {
     //add new Offer
     @RequestMapping("offer/new")
     public
-    String addNewOffer(Model model) {
+    String addNewOffer(Model model)
+    {
         model.addAttribute("offer", new Offer());
+        model.addAttribute("conditions",ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
         return "addOffer";
     }
 
-    // save offer
+    //save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
     public String saveOffer (@ModelAttribute Offer offer) {
-
-
         LocalDateTime today = LocalDateTime.now();
-
             offer.setCreationTimeAndDate(today);
             offerRepository.save(offer);
             return "redirect:/offers";
@@ -72,10 +68,11 @@ public class OfferController {
     }
 
 
-    // edit offer
+    //edit offer
     @GetMapping(value = "offer/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
         model.addAttribute("offer", offerRepository.findById(id));
+        model.addAttribute("conditions", ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
         return "offer";
     }
@@ -97,13 +94,4 @@ public class OfferController {
         return "offers";
     }
 
-//get ENUM
-    @RequestMapping(value = { "/enum" }, method = RequestMethod.GET)
-    public String selectOptionExample1Page(Model model) {
-
-        model.addAttribute("category", CategoryTypes.values());
-
-
-        return "offers";
-    }
 }
