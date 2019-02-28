@@ -53,13 +53,10 @@ public class OfferController {
 
     // save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public String saveOffer (@ModelAttribute Offer offer, Category category) {
-
-
+    public String saveOffer (@ModelAttribute Offer offer) {
 
 
         LocalDateTime today = LocalDateTime.now();
-
 
             offer.setCreationTimeAndDate(today);
             offerRepository.save(offer);
@@ -79,6 +76,7 @@ public class OfferController {
     @GetMapping(value = "offer/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
         model.addAttribute("offer", offerRepository.findById(id));
+        model.addAttribute("categories", categoryService.findAll());
         return "offer";
     }
 

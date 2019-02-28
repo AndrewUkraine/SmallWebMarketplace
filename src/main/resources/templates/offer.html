@@ -11,7 +11,7 @@
 <body>
 <h2>Edit Offer</h2>
 
-<form class="form-horizontal" action="/offer" method="post">
+<form class="form-horizontal" action="/offer", th:object="${offer}" method="post">
 
 <div class="container">
 
@@ -61,6 +61,15 @@
                 </label>
             </div>
         </div>
+
+
+
+    <select th:field="*{category.id}">
+        <option th:each="cat : ${categories}"
+                th:value="${cat.id}"
+                th:text="${cat.category}">
+        </option>
+    </select>
 
 
     <input type="hidden"  name="id" class="form-control" th:value="${offer.get().id}"/>
