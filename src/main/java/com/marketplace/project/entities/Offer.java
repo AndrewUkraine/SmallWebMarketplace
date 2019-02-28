@@ -41,7 +41,7 @@ public class Offer {
     private LocalDateTime creationTimeAndDate;
 
     @ManyToOne
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})

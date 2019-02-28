@@ -47,7 +47,7 @@ public class OfferController {
     public
     String addNewOffer(Model model) {
         model.addAttribute("offer", new Offer());
-        model.addAttribute("category", CategoryTypes.values());
+        model.addAttribute("categories", categoryService.findAll());
         return "addOffer";
     }
 
@@ -55,9 +55,8 @@ public class OfferController {
     @RequestMapping(value = "offer", method = RequestMethod.POST)
     public String saveOffer (@ModelAttribute Offer offer, Category category) {
 
-        category.setCategory(category.getCategory());
-       categoryService.save(category);
-       offer.setCategory(category);
+
+
 
         LocalDateTime today = LocalDateTime.now();
 

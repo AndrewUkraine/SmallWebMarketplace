@@ -13,7 +13,7 @@ public class Category {
     @Column(name = "CATEGORY", length = 30, nullable = false)
     private String category;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private List<Offer> offers;
 
     public Category() {
