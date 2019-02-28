@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="" lang="">
+
+<head>
+    <title>All Users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css"
+          href="../webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+
+<body>
+<h2>TROLOOOOOOOOP</h2>
+
+<div class="user">
+    <div class="table table-striped">
+    <table class="table table-striped">
+    <tbody>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">City</th>
+            <th scope="col">Email</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Password</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Last Name</th>
+
+        </tr>
+
+    <tr class="result" data-th-each="user: ${users}">
+
+        <td> [[${user.id}]] </td>
+        <td th:text="${user.city}">City</td>
+        <td th:text="${user.email}">Email</td>
+        <td th:text="${user.firsName}">First Name</td>
+        <td th:text="${user.password}">Password</td>
+        <td th:text="${user.phone}">Phone</td>
+        <td th:text="${user.secondName}">Last Name</td>
+    </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>
+
