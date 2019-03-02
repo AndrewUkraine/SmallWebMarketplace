@@ -74,7 +74,7 @@ public class OfferController {
         model.addAttribute("offer", offerRepository.findById(id));
         model.addAttribute("conditions", ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
-        return "offer";
+        return "updateOffer";
     }
 
 
