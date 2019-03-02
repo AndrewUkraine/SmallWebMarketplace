@@ -22,11 +22,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Controller
-@RequestMapping(value = "images")
 public class ImageController {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private OfferRepository offerRepository;
+
 
     //Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "/Users/andriishatov/IdeaProjects/SmallWebMarketplace/src/main/resources/static/images/";
@@ -75,9 +78,12 @@ public class ImageController {
     String addNewImage(@RequestParam String name, @RequestParam String path) {
 
         Image image = new Image();
+        //Offer offer = new Offer();
         image.setName(name);
         image.setPath(path);
+        image.setImageOffer(image.getImageOffer());
         imageRepository.save(image);
+
 
         return "SaveImage";
     }
