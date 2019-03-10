@@ -1,16 +1,31 @@
 package com.marketplace.project.controllers;
 
+import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
+import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.enums.ConditionType;
 import com.marketplace.project.services.CategoryService;
+import com.marketplace.project.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 //@RequestMapping(value = "/offers")
@@ -24,6 +39,14 @@ public class OfferController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ImageService imageService;
+
+
+    //path to file for spring
+    @Value("${upload.path}")
+    private String uploadPath;
 
 
     //delete Offer by Id
@@ -42,23 +65,61 @@ public class OfferController {
     //add new Offer
     @RequestMapping("offer/new")
     public
-    String addNewOffer(Model model)
-    {
+    String addNewOffer(Model model) throws IOException {
         model.addAttribute("offer", new Offer());
         model.addAttribute("conditions",ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
         return "addOffer";
     }
 
+
     //save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public String saveOffer (@ModelAttribute Offer offer) {
+    public String saveOffer (@ModelAttribute Offer offer, @RequestParam("files") MultipartFile[] files) throws IOException {
         LocalDateTime today = LocalDateTime.now();
             offer.setCreationTimeAndDate(today);
-            offerRepository.save(offer);
-            return "redirect:/offers";
 
+        List<Image>images = new ArrayList<>();
+
+        offerRepository.save(offer);
+
+        StringBuilder fileNames = new StringBuilder();
+
+
+                for (MultipartFile file : files) {
+
+                    if (file!= null && !file.getOriginalFilename().isEmpty() && file.getContentType().equals("image/jpeg")) {
+
+                    String uuidFile = UUID.randomUUID().toString();
+
+                    Path fileNameAndPath = Paths.get(uploadPath, file.getOriginalFilename());
+                    fileNames.append(uuidFile + "." + file.getOriginalFilename()+ "." + "jpg");
+
+                    Image image = new Image();
+                    image.setData(file.getBytes());
+                    image.setName(uuidFile + "." + file.getOriginalFilename());
+                    image.setPath(uploadPath);
+                    image.setImageOffer(offer);
+                    imageService.save(image);
+                    images.add(image);
+                    offer.setImages(images);
+
+                    try {
+                        Files.write(fileNameAndPath, file.getBytes());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+       // model.addAttribute("msg", "Successfully uploaded files "+fileNames.toString());
+
+
+            return "redirect:/offers";
     }
+
+
 
     //get All Offers
     @RequestMapping(value = "/offers", method = RequestMethod.GET)
@@ -70,7 +131,7 @@ public class OfferController {
 
     //edit offer
     @GetMapping(value = "offer/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
+    public String edit(@PathVariable Integer id, Model model, @RequestParam("file") MultipartFile file) {
         model.addAttribute("offer", offerRepository.findById(id));
         model.addAttribute("conditions", ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
