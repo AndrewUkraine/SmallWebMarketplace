@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,6 +43,9 @@ public class OfferController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
 
     //path to file for spring
@@ -92,7 +96,7 @@ public class OfferController {
 
                     String uuidFile = UUID.randomUUID().toString();
 
-                    Path fileNameAndPath = Paths.get(uploadPath, file.getOriginalFilename());
+                    Path fileNameAndPath = Paths.get(uploadPath, uuidFile + "." + file.getOriginalFilename());
                     fileNames.append(uuidFile + "." + file.getOriginalFilename()+ "." + "jpg");
 
                     Image image = new Image();
@@ -131,10 +135,11 @@ public class OfferController {
 
     //edit offer
     @GetMapping(value = "offer/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model, @RequestParam("file") MultipartFile file) {
+    public String edit(@PathVariable Integer id, Model model) {
         model.addAttribute("offer", offerRepository.findById(id));
         model.addAttribute("conditions", ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("images", imageRepository.getAllByImageOffer(offerRepository.findById(id)));
         return "updateOffer";
     }
 

@@ -11,7 +11,7 @@
 <body>
 <h2>Edit Offer</h2>
 
-<form class="form-horizontal" action="/offer"  th:object="${offer}" method="post">
+<form class="form-horizontal" action="/offer"  enctype="multipart/form-data" th:object="${offer}" method="post">
 
 <div class="container">
 
@@ -74,7 +74,22 @@
 
     <input type="hidden"  name ="created"  class="form-control" th:value="${offer.get().getCreated()}"/>
 
+    <div>
+       <ul>
+           <li th:each="file : ${images}">
+                <!--<a th:href="${file.getPath()}" th:text="${file.getImageOffer()}" />-->
+               <img type="image" th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
+           </li>
+        </ul>
+    </div>
 
+
+    <!--<div th:each="file : ${images}">-->
+        <!--<div class="gallery">-->
+            <!--<a th:href="${file.getPath()}"> <img th:src="${file.getPath()}" />-->
+            <!--</a>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
 
