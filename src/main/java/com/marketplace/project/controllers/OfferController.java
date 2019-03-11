@@ -61,6 +61,24 @@ public class OfferController {
     //delete offer
     @RequestMapping("offer/delete/{id}")
     public String deleteOfferById(@PathVariable Integer id, Model model) {
+
+
+//delete images from hardware
+            for (Image image : imageRepository.getAllByImageOffer(offerRepository.findById(id))) {
+
+                if (!image.getName().isEmpty()) {
+
+                    File file = new File(image.getPath() + image.getName());
+
+                    if (file.delete()) {
+                        System.out.println(file.getName() + " is deleted!");
+                    } else {
+                        System.out.println("Delete operation is failed.");
+                    }
+                }
+
+        }
+
         offerRepository.deleteById(id);
        model.addAttribute("offers", offerRepository.findAll());
        return "redirect:/offers";
@@ -97,6 +115,12 @@ public class OfferController {
                     String uuidFile = UUID.randomUUID().toString();
 
                     Path fileNameAndPath = Paths.get(uploadPath, uuidFile + "." + file.getOriginalFilename());
+
+                  //      File uploadDir = new File(uploadPath);
+//                        if (!uploadPath.exists()) {
+//                            uploadDir.mkdir();
+//                        }
+
                     fileNames.append(uuidFile + "." + file.getOriginalFilename()+ "." + "jpg");
 
                     Image image = new Image();
