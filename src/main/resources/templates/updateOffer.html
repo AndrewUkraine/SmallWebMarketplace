@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns=""  lang="">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="" lang="">
 
 <head>
     <title>Edit Offer</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css"
-          href="/../webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+          href="/../webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
 </head>
 
 <body>
 <h2>Edit Offer</h2>
 
-<form class="form-horizontal" action="/offer"  enctype="multipart/form-data" th:object="${offer}" method="post">
+<form class="form-horizontal" action="/offer" enctype="multipart/form-data" th:object="${offer}" method="post">
 
-<div class="container">
+    <div class="container">
 
-    <select th:field="*{condition}">
-        <option th:each="con : ${conditions}"
-                th:value="${con}"
-                th:text="${con}">
-        </option>
-    </select>
+        <select th:field="*{condition}">
+            <option th:each="con : ${conditions}"
+                    th:value="${con}"
+                    th:text="${con}">
+            </option>
+        </select>
 
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Description:</label>
             <div class="col-sm-10">
                 <label>
-                    <input type="text"  name="offerDescription" class="form-control" th:value="${offer.get().offerDescription}"/>
+                    <input type="text" name="offerDescription" class="form-control"
+                           th:value="${offer.get().offerDescription}"/>
                 </label>
             </div>
 
@@ -36,67 +37,74 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Price:</label>
             <div class="col-sm-10">
-                <input type="text" name="price" placeholder="Price" class="form-control" th:value="${offer.get().price}"/>
+                <input type="text" name="price" placeholder="Price" class="form-control"
+                       th:value="${offer.get().price}"/>
             </div>
         </div>
 
 
-
-
-    <div class="form-check">
-    <input type="checkbox" name="status"  th:field="*{status}"/>
-    </div>
-
-
-
+        <div class="form-check">
+            <input type="checkbox" name="status" th:field="*{status}"/>
+        </div>
 
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Title:</label>
             <div class="col-sm-10">
                 <label>
-                    <input type="text"  name="title"class="form-control" th:value="${offer.get().title}"/>
+                    <input type="text" name="title" class="form-control" th:value="${offer.get().title}"/>
                 </label>
             </div>
         </div>
 
 
+        <select th:field="*{category.id}">
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.category}">
+            </option>
+        </select>
 
-    <select th:field="*{category.id}">
-        <option th:each="cat : ${categories}"
-                th:value="${cat.id}"
-                th:text="${cat.category}">
-        </option>
-    </select>
+
+        <input type="hidden" name="id" class="form-control" th:value="${offer.get().id}"/>
+
+        <input type="hidden" name="created" class="form-control" th:value="${offer.get().getCreated()}"/>
+
+        <div>
+            <ul>
+                <li class="img-thumbnail" th:each="file : ${images}">
+                    <div class="photo" th:id="${file.id}">
+                        <img th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
+                        <!--<td><a th:href="${ file.getId()}">Delete</a></td>-->
+                        <button th:data-img="${file.id}" id="remove-pic-btn">Delete</button>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+        <input type="file" name="files" multiple>
+
+        <!--<span th:text="${someObject.someProperty != null} ? ${someObject.someProperty} : 'null value!'">someValue</span>-->
 
 
-    <input type="hidden"  name="id" class="form-control" th:value="${offer.get().id}"/>
+        <!--<div th:each="file : ${images}">-->
+        <!--<div class="gallery">-->
+        <!--<a th:href="${file.getPath()}"> <img th:src="${file.getPath()}" />-->
+        <!--</a>-->
+        <!--</div>-->
+        <!--</div>-->
 
-    <input type="hidden"  name ="created"  class="form-control" th:value="${offer.get().getCreated()}"/>
+        <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 
-    <div>
-       <ul>
-           <li th:each="file : ${images}">
-                <!--<a th:href="${file.getPath()}" th:text="${file.getImageOffer()}" />-->
-               <img type="image" th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
-           </li>
-        </ul>
+
     </div>
 
 
-    <!--<div th:each="file : ${images}">-->
-        <!--<div class="gallery">-->
-            <!--<a th:href="${file.getPath()}"> <img th:src="${file.getPath()}" />-->
-            <!--</a>-->
-        <!--</div>-->
-    <!--</div>-->
-
-    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-
-
-</div>
-
 </body>
+
+<script src="http://localhost:8080/static/js/js.js"></script>
+
 </html>
 
 

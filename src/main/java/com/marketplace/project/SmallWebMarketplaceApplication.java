@@ -6,6 +6,7 @@ import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
 import com.marketplace.project.entities.UserRole;
 import com.marketplace.project.entities.enums.CategoryTypes;
+import com.marketplace.project.entities.enums.ConditionType;
 import com.marketplace.project.entities.enums.RoleType;
 import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
@@ -140,7 +141,7 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
 
         Offer offer1 = new Offer();
         offer1.setCategory(category);
-        offer1.setCondition("New");
+        offer1.setCondition(ConditionType.NEW);
         offer1.setCreationTimeAndDate(LocalDateTime.now());
         offer1.setBuyer(user2);
         offer1.setSeller(user1);
@@ -161,7 +162,7 @@ public class SmallWebMarketplaceApplication implements CommandLineRunner {
 
         Offer offer2 = new Offer();
         offer2.setCategory(category5);
-        offer2.setCondition("Used");
+        offer2.setCondition(ConditionType.NEW);
         offer2.setCreationTimeAndDate(LocalDateTime.now());
         offer2.setBuyer(user1);
         offer2.setSeller(user2);

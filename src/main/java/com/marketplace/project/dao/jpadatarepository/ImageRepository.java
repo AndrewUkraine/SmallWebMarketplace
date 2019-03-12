@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface ImageRepository extends JpaRepository<Image, Integer> {
 
     List<Image> getAllByImageOffer (Optional<Offer> id);
+    List<Image> deleteAllByImageOffer (Optional<Offer> id);
+
 
 }

@@ -9,12 +9,14 @@ import com.marketplace.project.entities.User;
 import com.marketplace.project.services.ImageService;
 import com.marketplace.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -94,5 +96,26 @@ public class ImageController {
     Iterable<Image> getAllUsers(Image name, Model model) {
         model.addAttribute("name", name);
         return imageRepository.findAll();
+    }
+
+
+    //delete image
+    @RequestMapping(value = "/offer/image/{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteImageById(@PathVariable Integer id) {
+
+           Image image =   imageRepository.getOne(id);
+
+            if (!image.getName().isEmpty()) {
+
+                File file = new File(image.getPath() + image.getName());
+
+                if (file.delete()) {
+                    System.out.println(file.getName() + " is deleted!");
+                    imageRepository.delete(image);
+                } else {
+                    System.out.println("Delete operation is failed.");
+                }
+            }
     }
 }
