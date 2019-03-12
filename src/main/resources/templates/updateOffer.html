@@ -76,7 +76,7 @@
                     <div class="photo" th:id="${file.id}">
                         <img th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
                         <!--<td><a th:href="${ file.getId()}">Delete</a></td>-->
-                        <button th:data-img="${file.id}" id="remove-pic-btn">Delete</button>
+                        <button th:data-img="${file.id}" class="remove-pic-btn">Delete</button>
                     </div>
                 </li>
             </ul>

@@ -2,30 +2,32 @@
 
     //get delete button
 
-    var btnElem = document.getElementById('remove-pic-btn');
+    var btnElements = document.getElementsByClassName('remove-pic-btn');
     // elem.parentNode.removeChild(elem);
 
 
-    //add onClick function to button
-    btnElem.addEventListener('click', function (ev) {
-        ev.preventDefault();
-        alert(btnElem.dataset.img);
-        //get pictureId of the button
-        var imgId = btnElem.dataset.img;
+    for (var i = 0; i < btnElements.length; i++) {
+        //add onClick function to button
+        var btnElement = btnElements[i];
 
-        //todo remove picture by id
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/offer/image/' + imgId , false);
-        xhr.send();
+        btnElement.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            // alert(btnElements.dataset.img);
+            //get pictureId of the button
+            // debugger;
+            var imgId = this.dataset.img;
+
+            //todo remove picture by id
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/offer/image/' + imgId , false);
+            xhr.send();
 
 
-        //find and remove div by pictureId
-        document.getElementById(imgId).remove();
+            //find and remove div by pictureId
+            document.getElementById(imgId).remove();
 
-    })
+        });
+    }
+
+
 })();
-
-
-// (".clear_buton").click(function(event){
-//     $(this).closest(".con_img").remove();
-// });
