@@ -55,13 +55,10 @@
 
 
             <td th:text="${offer.getTitle()}"></td>
-            <!--<td th:text="${offer.getCategory().getId()}"></td>-->
 
 
-        <!--<td><input type="checkbox" value="${offer.getTitle()}"/> </td>-->
 
-
-            <td><a th:href="${ '/product/' + offer.id}">View</a></td>
+            <td><a th:href="${ '/offer/' + offer.id}">View</a></td>
             <td><a th:href="${'/offer/edit/' + offer.id}">Edit</a></td>
             <td><a th:href="${'/offer/delete/' + offer.id}">Delete</a></td>
 

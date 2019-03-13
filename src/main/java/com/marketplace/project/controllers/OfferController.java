@@ -156,6 +156,16 @@ public class OfferController {
         return "offers";
     }
 
+    //pre-View Offer
+    @GetMapping(value = "offer/{id}")
+    public String getOfferPreView(@PathVariable Integer id, Model model) {
+        model.addAttribute("offer", offerRepository.findById(id));
+        model.addAttribute("conditions", ConditionType.values());
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("images", imageRepository.getAllByImageOffer(offerRepository.findById(id)));
+        return "offerPreView";
+    }
+
 
     //edit offer
     @GetMapping(value = "offer/edit/{id}")
