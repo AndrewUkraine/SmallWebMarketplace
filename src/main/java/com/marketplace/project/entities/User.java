@@ -30,8 +30,8 @@ public class User {
     @Column(name = "`ACTIVE`", length = 30)
     private boolean active;
 
-    @Enumerated(EnumType.STRING)
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+   // @Enumerated(EnumType.STRING)
+    @ManyToMany(fetch = FetchType.EAGER) //cascade = CascadeType.REFRESH
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))

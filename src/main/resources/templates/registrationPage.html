@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="" lang="">
+
+<head>
+    <title>All Offers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css"
+          href="../webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+
+<body>
+<h2>New User</h2>
+<div class="container">
+
+    <form action="/user"  th:object="${user}"  method="post">
+
+
+        <p>Firs Name: <input type="text" th:field="*{firsName}" /></p>
+        <p>Second Name: <input type="text" th:field="*{secondName}" /></p>
+        <p>Email: <input type="email" th:field="*{email}" /></p>
+        <p>Password: <input type="password" th:field="*{password}" /></p>
+        <p>Phone: <input type="text" th:field="*{phone}" /></p>
+        <p>City: <input type="text" th:field="*{city}" /></p>
+
+
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>
+
+
+
+</body>
+</html>
+
+
+
+
+

@@ -6,6 +6,7 @@ import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
+import com.marketplace.project.entities.UserRole;
 import com.marketplace.project.services.OfferService;
 import com.marketplace.project.services.UserService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -14,33 +15,46 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
-@RequestMapping(value = "/user")
+//@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/registration")
+    public String registration(Model model) {
+        model.addAttribute("user", new User());
+        return "registrationPage";
+    }
+
     // Add new User
-    @GetMapping(path = "/add")
-    public @ResponseBody
-    String addNewUser(@RequestParam String city, @RequestParam String email, @RequestParam String name, @RequestParam String password, @RequestParam String phone, @RequestParam String last_name) {
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
 
-        User user = new User();
-        user.setCity(city);
-        user.setEmail(email);
-        user.setFirsName(name);
-        user.setPassword(password);
-        user.setPhone(phone);
-        user.setSecondName(last_name);
+        User userFromDb = userRepository.findUserByEmail(user.getEmail());
 
+        if (userFromDb != null) {
+            model.put("message", "User exists!");
+            return "offers";
+        }
+
+        UserRole userRole = new UserRole();
+        userRole.setRoleType("USER");
+
+        Set<UserRole> us = new HashSet<>();
+        us.add(userRole);
+
+        user.setActive(true);
+        //user.setUserRoles(us);
         userRepository.save(user);
-        return "Saved";
+
+        return "redirect:/login";
+
     }
 
     //Update User

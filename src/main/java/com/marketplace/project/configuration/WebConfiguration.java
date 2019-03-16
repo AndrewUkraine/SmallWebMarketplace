@@ -1,4 +1,4 @@
-package com.marketplace.project.controllers;
+package com.marketplace.project.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
-public class GlobalExceptionHandler implements WebMvcConfigurer {
+public class WebConfiguration implements WebMvcConfigurer {
 
     @Value("${upload.path}")
     private String uploadPath;
