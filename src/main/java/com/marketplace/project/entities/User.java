@@ -7,9 +7,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-@NamedNativeQuery(name = User.FIND_USER_BY_CITY, query = "SELECT user.* FROM user WHERE user.city = ?", resultClass = User.class)
+//@NamedNativeQuery(name = User.FIND_USER_BY_CITY, query = "SELECT user.* FROM user WHERE user.city = ?", resultClass = User.class)
 public class User {
-    public static final String FIND_USER_BY_CITY = "User.findByCity";
+    //public static final String FIND_USER_BY_CITY = "User.findByCity";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,9 @@ public class User {
     private String phone;
     @Column(name = "CITY", length = 60)
     private String city;
+
+    @Column(name = "`ACTIVE`", length = 30)
+    private boolean active;
 
     @Enumerated(EnumType.STRING)
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
@@ -118,6 +121,14 @@ public class User {
 
     public void setPurchasedItems(List<Offer> purchasedItems) {
         this.purchasedItems = purchasedItems;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 
