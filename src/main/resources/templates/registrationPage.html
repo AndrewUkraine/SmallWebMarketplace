@@ -12,7 +12,7 @@
 <h2>New User</h2>
 <div class="container">
 
-    <form action="/registration" th:action="@{/registration}" th:object="${user}"  method="post">
+    <form  th:action="@{/registration}" th:object="${user}"  method="post">
 
 
         <p>Firs Name: <input type="text" th:field="*{firsName}" /></p>
