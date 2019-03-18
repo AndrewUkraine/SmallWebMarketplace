@@ -4,14 +4,12 @@ import com.marketplace.project.entities.Category;
 import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
-import com.marketplace.project.entities.UserRole;
 import com.marketplace.project.entities.enums.CategoryTypes;
 import com.marketplace.project.entities.enums.ConditionType;
 import com.marketplace.project.entities.enums.RoleType;
 import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
 import com.marketplace.project.services.OfferService;
-import com.marketplace.project.services.UserRoleService;
 import com.marketplace.project.services.UserService;
 import javafx.scene.input.DataFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +47,7 @@ public class SmallWebMarketplaceApplication  {
     ImageService imageService;
     @Autowired
     CategoryService categoryService;
-    @Autowired
-    UserRoleService userRoleService;
+
 
     @Bean
     public Java8TimeDialect java8TimeDialect() {

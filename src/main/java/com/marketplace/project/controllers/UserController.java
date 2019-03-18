@@ -6,7 +6,7 @@ import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
-import com.marketplace.project.entities.UserRole;
+import com.marketplace.project.entities.enums.RoleType;
 import com.marketplace.project.services.OfferService;
 import com.marketplace.project.services.UserService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -33,22 +33,18 @@ public class UserController {
     }
 
     // Add new User
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
 
-        User userFromDb = userRepository.findUserByEmail(user.getEmail());
+        User userFromDb = userRepository.findByEmail(user.getEmail());
 
         if (userFromDb != null) {
-            model.put("message", "User exists!");
-            return "offers";
+           // model.put("message", "User exists!");
+            return "redirect:/offers";
         }
 
-        UserRole userRole = new UserRole();
-        userRole.setRoleType("USER");
 
-        Set<UserRole> us = new HashSet<>();
-        us.add(userRole);
-
+        user.setRoles(Collections.singleton(RoleType.USER));
         user.setActive(true);
         //user.setUserRoles(us);
         userRepository.save(user);
@@ -96,8 +92,8 @@ public class UserController {
     @GetMapping(path = "/email/{email}")
     public @ResponseBody
     User findByEmail(@PathVariable String email, Model model) {
-        User user = userRepository.findUserByEmail(email);
-        model.addAttribute("users", userRepository.findUserByEmail(email));
+        User user = userRepository.findByEmail(email);
+        model.addAttribute("users", userRepository.findByEmail(email));
         return user;
     }
 

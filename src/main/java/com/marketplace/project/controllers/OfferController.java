@@ -5,11 +5,13 @@ import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
+import com.marketplace.project.entities.User;
 import com.marketplace.project.entities.enums.ConditionType;
 import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -97,13 +99,21 @@ public class OfferController {
 
     //save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public String saveOffer (@ModelAttribute Offer offer, @RequestParam("files") MultipartFile[] files) throws IOException {
+    public String saveOffer (@AuthenticationPrincipal User user,  @ModelAttribute Offer offer, @RequestParam("files") MultipartFile[] files) throws IOException {
+
         LocalDateTime today = LocalDateTime.now();
             offer.setCreationTimeAndDate(today);
 
         List<Image>images = new ArrayList<>();
 
+
+
+        offer.setSeller(user);
+
+
+
         offerRepository.save(offer);
+
 
         StringBuilder fileNames = new StringBuilder();
 
@@ -151,7 +161,7 @@ public class OfferController {
 
     //get All Offers
     @RequestMapping(value = "/offers", method = RequestMethod.GET)
-    public String getAllOffers(Model model) {
+    public String getAllOffers(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("offers", offerRepository.findAll());
         return "offers";
     }

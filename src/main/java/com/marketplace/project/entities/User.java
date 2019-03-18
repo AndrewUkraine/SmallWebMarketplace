@@ -1,14 +1,19 @@
 package com.marketplace.project.entities;
 
 
+import com.marketplace.project.entities.enums.RoleType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
 //@NamedNativeQuery(name = User.FIND_USER_BY_CITY, query = "SELECT user.* FROM user WHERE user.city = ?", resultClass = User.class)
-public class User {
+public class User implements UserDetails {
     //public static final String FIND_USER_BY_CITY = "User.findByCity";
 
     @Id
@@ -30,17 +35,16 @@ public class User {
     @Column(name = "`ACTIVE`", length = 30)
     private boolean active;
 
-   // @Enumerated(EnumType.STRING)
-    @ManyToMany(fetch = FetchType.EAGER) //cascade = CascadeType.REFRESH
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-    private Set<UserRole> userRoles;
+    @ElementCollection(targetClass = RoleType.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<RoleType> roles;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "seller", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> sellList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> purchasedItems;
 
     public Integer getId() {
@@ -75,8 +79,38 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
     }
 
     public void setPassword(String password) {
@@ -99,13 +133,6 @@ public class User {
         this.city = city;
     }
 
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
 
     public List<Offer> getSellList() {
         return sellList;
@@ -131,5 +158,12 @@ public class User {
         this.active = active;
     }
 
+    public Set<RoleType> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleType> roles) {
+        this.roles = roles;
+    }
 
 }
