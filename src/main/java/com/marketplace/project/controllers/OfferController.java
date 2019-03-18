@@ -110,7 +110,16 @@ public class OfferController {
 
         offer.setSeller(user);
 
-
+//        if (!user.getSellList().isEmpty())
+//        {
+//            user.getSellList().add(offer);
+//        }
+//
+//        else {
+//            List<Offer> offerList = new ArrayList<>();
+//            offerList.add(offer);
+//            user.setSellList(offerList);
+//        }
 
         offerRepository.save(offer);
 
@@ -162,7 +171,8 @@ public class OfferController {
     //get All Offers
     @RequestMapping(value = "/offers", method = RequestMethod.GET)
     public String getAllOffers(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("offers", offerRepository.findAll());
+
+        model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(user.getId())));
         return "offers";
     }
 

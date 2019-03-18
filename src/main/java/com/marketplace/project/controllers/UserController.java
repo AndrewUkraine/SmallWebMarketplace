@@ -33,14 +33,14 @@ public class UserController {
     }
 
     // Add new User
-    @RequestMapping(value = "registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
 
         User userFromDb = userRepository.findByEmail(user.getEmail());
 
         if (userFromDb != null) {
            // model.put("message", "User exists!");
-            return "redirect:/offers";
+            return "offers";
         }
 
 

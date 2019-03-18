@@ -14,7 +14,7 @@ public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
     List<Offer> findByTitle (String title);
 
-    List<Offer> findBySeller (Optional<User> id);
+    List<Offer> findBySeller (Optional<User> user);
 
 
 }
