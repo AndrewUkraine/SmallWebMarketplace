@@ -109,17 +109,7 @@ public class OfferController {
 
 
         offer.setSeller(user);
-
-//        if (!user.getSellList().isEmpty())
-//        {
-//            user.getSellList().add(offer);
-//        }
-//
-//        else {
-//            List<Offer> offerList = new ArrayList<>();
-//            offerList.add(offer);
-//            user.setSellList(offerList);
-//        }
+        user.getSellList().add(offer);
 
         offerRepository.save(offer);
 
