@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private Set<RoleType> roles;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "seller", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "seller", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> sellList;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})

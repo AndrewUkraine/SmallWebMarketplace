@@ -26,13 +26,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OfferRepository offerRepository;
+
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("user", new User());
         return "registrationPage";
     }
 
-    // Add new User
+    // Add new User +++
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
 
@@ -88,6 +91,8 @@ public class UserController {
         return "User is deleted";
     }
 
+
+
     //get User By Email
     @GetMapping(path = "/email/{email}")
     public @ResponseBody
@@ -98,11 +103,19 @@ public class UserController {
     }
 
 
-    //get All users
-    @GetMapping(path = "/all")
+    //get All users +++
+    @GetMapping(path = "/users")
     public String getAllUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "allUsers";
+    }
+
+    //delete user +++
+    @RequestMapping("user/delete/{id}")
+    public String deleteOfferById(@PathVariable Integer id, Model model) {
+        userRepository.deleteById(id);
+        model.addAttribute("users", userRepository.findAll());
+        return "redirect:/users";
     }
 
 }

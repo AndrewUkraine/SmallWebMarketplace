@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<h2>TROLOOOOOOOOP</h2>
+<h2>USERS</h2>
 
 <div class="user">
     <div class="table table-striped">
@@ -23,6 +23,9 @@
             <th scope="col">Password</th>
             <th scope="col">Phone</th>
             <th scope="col">Last Name</th>
+            <th scope="col">Amount of Offers</th>
+            <th scope="col">Delete</th>
+
 
         </tr>
 
@@ -35,6 +38,10 @@
         <td th:text="${user.password}">Password</td>
         <td th:text="${user.phone}">Phone</td>
         <td th:text="${user.secondName}">Last Name</td>
+        <td th:text="${user.getSellList().size()}">Amount of Offer</td>
+
+        <td><a th:href="${'/user/delete/' + user.id}">Delete</a></td>
+
     </tr>
         </tbody>
     </table>
