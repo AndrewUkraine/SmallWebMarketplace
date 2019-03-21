@@ -24,7 +24,9 @@
             <th scope="col">Phone</th>
             <th scope="col">Last Name</th>
             <th scope="col">Amount of Offers</th>
+            <th scope="col">Role</th>
             <th scope="col">Delete</th>
+            <th scope="col">Status</th>
 
 
         </tr>
@@ -38,9 +40,18 @@
         <td th:text="${user.password}">Password</td>
         <td th:text="${user.phone}">Phone</td>
         <td th:text="${user.secondName}">Last Name</td>
-        <td th:text="${user.getSellList().size()}">Amount of Offer</td>
+
+        <td><a th:href="${'/offers/' + user.id}" th:text="${user.getSellList().size()}">Amount of Offer</a></td>
+
+        <td th:text="${user.getRoles()}">Role </td>
 
         <td><a th:href="${'/user/delete/' + user.id}">Delete</a></td>
+
+        <td> <input type="checkbox" th:text="${user.isActive()}"></input></td>
+
+        <!--<div class="form-check">-->
+            <!--<input type="checkbox" name="active" th:field="*{active}"/>-->
+        <!--</div>-->
 
     </tr>
         </tbody>
