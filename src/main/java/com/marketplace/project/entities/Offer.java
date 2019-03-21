@@ -1,5 +1,6 @@
 package com.marketplace.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -8,6 +9,9 @@ import com.marketplace.project.entities.enums.ConditionType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,26 +24,35 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "TITLE", length = 500)
+
+    @NotBlank
+    @Size(min = 2, max = 120)
+    @Column(name = "TITLE", length = 120, nullable = false)
     private String title;
+
+    @NotNull
     @Column(name = "PRICE", nullable = false, scale = 2)
     private BigDecimal price;
-    @Column(name = "`DESCRIPTION`", length = 1000)
+
+    @NotBlank
+    @Size(min = 2, max = 1000)
+    @Column(name = "`DESCRIPTION`", length = 1000, nullable = false)
     private String offerDescription;
-    @Column(name = "`CONDITION`", length = 30)
+
+
+    @Column(name = "`CONDITION`", nullable = false)
     @Enumerated(EnumType.STRING)
     private ConditionType condition;
-    @Column(name = "`STATUS`", length = 30)
+
+    @Column(name = "`STATUS`", nullable = false)
     private Boolean status;
 
     @Column(name = "`CREATION_TIME`", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh.mm.ss")
     private LocalDateTime creationTimeAndDate;
 
     @ManyToOne
-//    @Enumerated(EnumType.STRING)
+//  @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
@@ -120,17 +133,16 @@ public class Offer {
     }
 
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "created")
+    @Column(name = "createdTime")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date created;
 
 
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "updated")
+    @Column(name = "updatedTime")
     private Date updated;
 
     @PrePersist
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     protected void onCreate() {
         created = new Date();
     }

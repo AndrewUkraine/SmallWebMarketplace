@@ -1,12 +1,16 @@
 package com.marketplace.project.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.marketplace.project.entities.enums.RoleType;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +23,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "FIRST_NAME", length = 30)
+    @Column(name = "FIRST_NAME", length = 30, nullable = false)
     private String firsName;
     @Column(name = "LAST_NAME", length = 30)
     private String secondName;
@@ -27,9 +31,9 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
-    @Column(name = "PHONE", length = 30)
+    @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     private String phone;
-    @Column(name = "CITY", length = 60)
+    @Column(name = "CITY", length = 60, nullable = false)
     private String city;
 
     @Column(name = "`ACTIVE`", length = 30)
@@ -46,6 +50,40 @@ public class User implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> purchasedItems;
+
+    //@JsonFormat(pattern = "yyyy-MM-dd hh.mm.ss")
+    @Column(name = "createdTime")
+    private Date created;
+
+    //@JsonFormat(pattern = "yyyy-MM-dd hh.mm.ss")
+    @Column(name = "updatedTime")
+    private Date updated;
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
     public Integer getId() {
         return id;
