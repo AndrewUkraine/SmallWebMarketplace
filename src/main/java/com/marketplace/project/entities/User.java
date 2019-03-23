@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ public class User implements UserDetails {
     @Column(name = "EMAIL", unique = true, nullable = false, length = 60)
     private String email;
     @Column(name = "PASSWORD", nullable = false, length = 100)
+    @NotBlank
     private String password;
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     private String phone;

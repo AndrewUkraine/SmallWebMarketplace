@@ -159,10 +159,10 @@ public class OfferController {
 
 
     //get All Offers
-    @RequestMapping(value = "/offers", method = RequestMethod.GET)
-    public String getAllOffers(Model model, @AuthenticationPrincipal User user) {
+    @RequestMapping(value = "/alloffers", method = RequestMethod.GET)
+    public String getAllOffers(Model model) {
 
-        model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(user.getId())));
+        model.addAttribute("offers", offerRepository.findAll());
         return "offers";
     }
 
@@ -189,12 +189,13 @@ public class OfferController {
 
 
     //find all offer by seller id
-    @GetMapping(value = "/offers/{id}")
-    public String findAllOfferBySellerId (@PathVariable int id, Model model) {
-        model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(id)));
-        return "offers";
+    @RequestMapping(value = "/offers", method = RequestMethod.GET)
+    public String getAllOffersBySeller(Model model, @AuthenticationPrincipal User user) {
 
+        model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(user.getId())));
+        return "offers";
     }
+
 
 
     //find all offer by title
@@ -202,6 +203,14 @@ public class OfferController {
     public String findOfferByTitle(@PathVariable String title) {
        offerRepository.findByTitle(title);
         return "offers";
+    }
+
+    //find all offer by seller id
+    @GetMapping(value = "/offers/{id}")
+    public String findAllOfferBySellerId (@PathVariable int id, Model model) {
+        model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(id)));
+        return "offers";
+
     }
 
 }
