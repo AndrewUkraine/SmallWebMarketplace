@@ -11,6 +11,7 @@ import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Controller
 //@RequestMapping(value = "/offers")
+//@PreAuthorize("hasRole('USER')")
 public class OfferController {
 
     @Autowired
