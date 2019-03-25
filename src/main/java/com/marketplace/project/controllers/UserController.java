@@ -11,6 +11,8 @@ import com.marketplace.project.services.OfferService;
 import com.marketplace.project.services.UserService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +41,16 @@ public class UserController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
 
-//        User userFromDb = userRepository.findByEmail(user.getEmail());
-//
-//        if (userFromDb != null) {
-//           // model.put("message", "User exists!");
-//            return "offers";
-//        }
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
+        if (user.getId() == null)
+        {
+            model.put("message", "User doesn't exists!");
+        }
 
         user.setRoles(Collections.singleton(RoleType.USER));
         user.setActive(true);
-        //user.setUserRoles(us);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
         return "redirect:/login";
