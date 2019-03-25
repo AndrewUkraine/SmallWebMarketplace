@@ -11,6 +11,11 @@
 <body>
 <h2>Offers</h2>
 
+<div th:if="${user!=null}">
+    <h1> Hello  <a th:text="${user.get().getFirsName()}"></a></h1>
+</div>
+
+
 
 <div class="container">
 

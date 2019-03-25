@@ -194,6 +194,7 @@ public class OfferController {
     @RequestMapping(value = "/offers", method = RequestMethod.GET)
     public String getAllOffersBySeller(Model model, @AuthenticationPrincipal User user) {
 
+        model.addAttribute("user", userRepository.findById(user.getId()));
         model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(user.getId())));
         return "offers";
     }
