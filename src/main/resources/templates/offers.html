@@ -51,7 +51,7 @@
 
         <td th:text="${offer.getId()}"></td>
         <td th:text="${offer.getCondition()}"></td>
-        <td th:text="${offer.getCreationTimeAndDate()}"></td>
+        <td th:text="${#temporals.format(offer.getCreationTimeAndDate(), 'dd-MMM-yyyy HH:mm')}"></td>
         <td th:text="${offer.getOfferDescription()}"></td>
         <td th:text="${offer.getPrice()}"></td>
 

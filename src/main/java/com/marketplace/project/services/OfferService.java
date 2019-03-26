@@ -9,6 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.thymeleaf.spring5.ISpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +65,14 @@ public class OfferService {
 
     public void deleteAll(Iterable<? extends Offer> entities) {
         offerRepository.deleteAll(entities);
+    }
+
+    //To work with new Time package, we need to configure our template engine to use the new Java8TimeDialect:
+    private ISpringTemplateEngine templateEngine(ITemplateResolver templateResolver) {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.addDialect(new Java8TimeDialect());
+        engine.setTemplateResolver(templateResolver);
+        return engine;
     }
 
 
