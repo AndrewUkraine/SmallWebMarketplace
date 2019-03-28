@@ -1,24 +1,18 @@
 package com.marketplace.project.controllers;
 
-import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
-import com.marketplace.project.entities.Image;
-import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
 import com.marketplace.project.entities.enums.RoleType;
-import com.marketplace.project.services.OfferService;
-import com.marketplace.project.services.UserService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.Role;
-import java.math.BigDecimal;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -37,9 +31,16 @@ public class UserController {
         return "registrationPage";
     }
 
+    @GetMapping("/update-user")
+    public String updateUser(@AuthenticationPrincipal User user,  Model model) {
+        model.addAttribute("user", user);
+        return "updateUser";
+    }
+
+
     // Add new User +++
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String addNewUser(@ModelAttribute User user,  Map<String, Object> model) {
+    public String addNewUser(@ModelAttribute User user, Map<String, Object> model) {
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
@@ -57,20 +58,12 @@ public class UserController {
 
     }
 
-    //Update User
-    @GetMapping(path = "/upd/{id}")
-    public @ResponseBody
-    User updUser(@RequestParam String city, @RequestParam String email, @RequestParam String name, @RequestParam String password, @RequestParam String phone, @RequestParam String last_name, @PathVariable Integer id) {
+    // Update User
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updateUser(@ModelAttribute User user, Map<String, Object> model) {
 
-        User u = userRepository.getOne(id);
-        u.setCity(city);
-        u.setEmail(email);
-        u.setFirsName(name);
-        u.setPassword(password);
-        u.setPhone(phone);
-        u.setSecondName(last_name);
-
-        return userRepository.save(u);
+            userRepository.save(user);
+            return "redirect:/offers";
     }
 
 
@@ -81,17 +74,6 @@ public class UserController {
         userRepository.findById(id).ifPresent(o -> model.addAttribute("users", o));
         return "allUsers";
     }
-
-
-    //delet User By Id
-    @GetMapping(path = "/delete/{id}")
-    public @ResponseBody
-    String deleteById(@PathVariable Integer id) {
-        userRepository.deleteById(id);
-
-        return "User is deleted";
-    }
-
 
 
     //get User By Email

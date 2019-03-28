@@ -24,17 +24,24 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "FIRST_NAME", length = 30, nullable = false)
     private String firsName;
+
     @Column(name = "LAST_NAME", length = 30)
     private String secondName;
+
     @Column(name = "EMAIL", unique = true, nullable = false, length = 60)
     private String email;
+
     @Column(name = "PASSWORD", nullable = false, length = 100)
-    @NotBlank
+   // @Transient
+    @NotBlank (message = "Must by not empty")
     private String password;
+
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     private String phone;
+
     @Column(name = "CITY", length = 60, nullable = false)
     private String city;
 
@@ -53,11 +60,11 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> purchasedItems;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd hh.mm.ss")
-    @Column(name = "createdTime")
+
+    @Column(name = "createdTime", updatable = false)
     private Date created;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd hh.mm.ss")
+
     @Column(name = "updatedTime")
     private Date updated;
 
