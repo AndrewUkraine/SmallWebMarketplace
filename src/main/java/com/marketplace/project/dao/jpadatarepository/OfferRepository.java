@@ -12,9 +12,11 @@ import java.util.Optional;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
+    @Query(value = "SELECT * FROM offer as o WHERE o.status = true  ORDER BY o.creation_time DESC", nativeQuery = true)
+    List<Offer> findAllActiveOffer();
+
     List<Offer> findByTitle (String title);
 
     List<Offer> findBySeller (Optional<User> user);
-
 
 }

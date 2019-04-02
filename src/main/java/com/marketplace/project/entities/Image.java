@@ -1,6 +1,5 @@
 package com.marketplace.project.entities;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 

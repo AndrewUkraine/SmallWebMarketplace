@@ -2,12 +2,7 @@ package com.marketplace.project.controllers;
 
 import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
-import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Image;
-import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.User;
-import com.marketplace.project.services.ImageService;
-import com.marketplace.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

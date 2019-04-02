@@ -1,39 +1,16 @@
 package com.marketplace.project;
 
-import com.marketplace.project.entities.Category;
-import com.marketplace.project.entities.Image;
-import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.User;
-import com.marketplace.project.entities.enums.CategoryTypes;
-import com.marketplace.project.entities.enums.ConditionType;
-import com.marketplace.project.entities.enums.RoleType;
 import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
 import com.marketplace.project.services.OfferService;
 import com.marketplace.project.services.UserService;
-import javafx.scene.input.DataFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigurationExcludeFilter;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 //@ComponentScan(value = {"com.marketplace.project.controllers", "com.marketplace.project.services", "com.marketplace.project.dao", "com.marketplace.project.entities"})
 @SpringBootApplication

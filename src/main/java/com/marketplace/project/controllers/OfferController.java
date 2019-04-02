@@ -11,13 +11,11 @@ import com.marketplace.project.services.CategoryService;
 import com.marketplace.project.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 //@RequestMapping(value = "/offers")
@@ -108,8 +104,6 @@ public class OfferController {
 
         List<Image>images = new ArrayList<>();
 
-
-
         offer.setSeller(user);
         user.getSellList().add(offer);
 
@@ -154,17 +148,26 @@ public class OfferController {
 
        // model.addAttribute("msg", "Successfully uploaded files "+fileNames.toString());
 
-
             return "redirect:/offers";
     }
 
 
 
     //get All Offers
-    @RequestMapping(value = "/alloffers", method = RequestMethod.GET)
+    @RequestMapping(value = "/offers", method = RequestMethod.GET)
     public String getAllOffers(Model model) {
 
         model.addAttribute("offers", offerRepository.findAll());
+        return "offers";
+    }
+
+
+
+    //get Offers witch are Active
+    @RequestMapping(value = "/alloffers", method = RequestMethod.GET)
+    public String getOffersWitchAreActive(Model model) {
+
+        model.addAttribute("offers", offerRepository.findAllActiveOffer());
         return "offers";
     }
 
@@ -191,14 +194,13 @@ public class OfferController {
 
 
     //find all offer by seller id
-    @RequestMapping(value = "/offers", method = RequestMethod.GET)
+    @RequestMapping(value = "/user-offers", method = RequestMethod.GET)
     public String getAllOffersBySeller(Model model, @AuthenticationPrincipal User user) {
 
         model.addAttribute("user", userRepository.findById(user.getId()));
         model.addAttribute("offers", offerRepository.findBySeller(userRepository.findById(user.getId())));
         return "offers";
     }
-
 
 
     //find all offer by title

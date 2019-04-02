@@ -3,12 +3,9 @@ package com.marketplace.project.services;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring5.ISpringTemplateEngine;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -74,46 +71,6 @@ public class OfferService {
         engine.setTemplateResolver(templateResolver);
         return engine;
     }
-
-
-//    @Transactional
-//    public List<OfferService> getSongPlayersDTOList (List<Offer> songPlayersList){
-//        List<OfferService> songPlayersDTOList = new ArrayList<>();
-//
-//        for (Offer songPlayers : songPlayersList){
-//            songInstrumentalistList = new ArrayList<>();
-//
-//            Offer songPlayersDTO = new Offer();
-//            songPlayersDTO.setId(songPlayers.getId());
-//            songPlayersDTO.setCondition(songPlayers.getCondition());
-//            songPlayersDTO.setOfferDescription(songPlayers.getOfferDescription());
-//            songPlayersDTO.setPrice(songPlayers.getPrice());
-//            songPlayersDTO.setStatus(songPlayers.getStatus());
-//            songPlayersDTO.setTitle(songPlayers.getTitle());
-//            songPlayersDTO.setSeller(songPlayers.getSeller());
-//
-//            for (User people : songPlayers.getSeller()){
-//                PeopleDTO peopleDTO = new PeopleDTO();
-//                peopleDTO.setId(people.getId());
-//                peopleDTO.setHuman(people.getHuman());
-//                peopleDTO.setRockGroups(people.getRockGroups());
-//                songInstrumentalistList.add(peopleDTO);
-//            }
-//            songPlayersDTO.setSongInstrumentalistList(songInstrumentalistList);
-//
-//            songPlayersDTOList.add(songPlayersDTO);
-//
-//        }
-//        return songPlayersDTOList;
-//    }
-
 }
 
-
-//    //Get User by Id
-//    @GetMapping(value = "/user-{id}")
-//    public String getById(@PathVariable int id, Model model) {
-//
-//        userRepository.findById(id).ifPresent(o -> model.addAttribute("users", o));
-//
 

@@ -1,10 +1,6 @@
 package com.marketplace.project.entities;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.marketplace.project.entities.enums.RoleType;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Controller
@@ -39,6 +39,7 @@ public class UserController {
 
 
     // Add new User +++
+    @Transactional
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user, Map<String, Object> model) {
 
