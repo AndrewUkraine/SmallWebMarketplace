@@ -15,6 +15,8 @@ public class Image {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "MAIN_FOTO")
+    private boolean activFoto;
 
     @Lob
     private byte[] data;
@@ -25,11 +27,6 @@ public class Image {
     public Image() {
     }
 
-    public Image(String name, byte[] data, Offer imageOffer) {
-        this.name = name;
-        this.data = data;
-        this.imageOffer = imageOffer;
-    }
 
     public Integer getId() {
         return id;
@@ -69,5 +66,13 @@ public class Image {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public boolean isActivFoto() {
+        return activFoto;
+    }
+
+    public void setActivFoto(boolean activFoto) {
+        this.activFoto = activFoto;
     }
 }

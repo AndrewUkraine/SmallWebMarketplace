@@ -75,7 +75,9 @@
                 <li class="img-thumbnail" th:each="file : ${images}">
                     <div class="photo" th:id="${file.id}">
                         <img th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
-                        <!--<td><a th:href="${ file.getId()}">Delete</a></td>-->
+
+                        <input type="checkbox" name="activFoto" th:accept="${file.activFoto}"/>
+
                         <button th:data-img="${file.id}" class="remove-pic-btn">Delete</button>
                     </div>
                 </li>
@@ -83,23 +85,19 @@
 
         </div>
 
-        <input type="file" name="files" multiple>
+        <input type="file"  name="files" multiple>
 
-        <!--<span th:text="${someObject.someProperty != null} ? ${someObject.someProperty} : 'null value!'">someValue</span>-->
-
-
-        <!--<div th:each="file : ${images}">-->
-        <!--<div class="gallery">-->
-        <!--<a th:href="${file.getPath()}"> <img th:src="${file.getPath()}" />-->
-        <!--</a>-->
-        <!--</div>-->
-        <!--</div>-->
 
         <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 
 
-    </div>
-
+        <!-- should proccesing exceptions. But not working -->
+        <div th:if ="${#fields.hasErrors('*')}" class="alert alert-danger">
+            <p>Errors:</p>
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Validation errors</li>
+            </ul>
+        </div>
 
 </body>
 

@@ -97,53 +97,52 @@ public class OfferController {
 
     //save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public String saveOffer (@AuthenticationPrincipal User user,  @ModelAttribute Offer offer, @RequestParam("files") MultipartFile[] files) throws IOException {
+    public String saveOffer (@AuthenticationPrincipal User user,  @ModelAttribute Offer offer, @RequestParam("files")  List<MultipartFile> files, @ModelAttribute Image image, Model model) throws IOException {
 
         LocalDateTime today = LocalDateTime.now();
-            offer.setCreationTimeAndDate(today);
-
-        List<Image>images = new ArrayList<>();
+        offer.setCreationTimeAndDate(today);
 
         offer.setSeller(user);
         user.getSellList().add(offer);
-
         offerRepository.save(offer);
 
 
         StringBuilder fileNames = new StringBuilder();
 
+       List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
 
+        int size= files.size() + offer.getImages().size();
+        //offer.getImages().size()
+        if (files.size()>5 || images.size()>5 || size>5)
+        {
+          model.addAttribute("total", "You can't upload more then 5 photos. Now you are trying save " + files.size() + " but alredy have " + images.size() + " Total " + size);
+          return "excaption";
+
+        }
                 for (MultipartFile file : files) {
+                    if (!file.isEmpty() && file.getOriginalFilename()!=null && file.getContentType().equals("image/jpeg")) {
+                        String uuidFile = UUID.randomUUID().toString();
+                        Path fileNameAndPath = Paths.get(uploadPath, uuidFile + "." + file.getOriginalFilename());
 
-                    if (file!= null && !file.getOriginalFilename().isEmpty() && file.getContentType().equals("image/jpeg")) {
+                            fileNames.append(uuidFile).append(".").append(file.getOriginalFilename()).append(".").append("jpg");
 
-                    String uuidFile = UUID.randomUUID().toString();
+                            image.setData(file.getBytes());
+                            image.setName(uuidFile + "." + file.getOriginalFilename());
+                            image.setPath(uploadPath);
+                            image.setImageOffer(offer);
 
-                    Path fileNameAndPath = Paths.get(uploadPath, uuidFile + "." + file.getOriginalFilename());
 
-                  //      File uploadDir = new File(uploadPath);
-//                        if (!uploadPath.exists()) {
-//                            uploadDir.mkdir();
-//                        }
+                            offer.getImages().add(image);
 
-                    fileNames.append(uuidFile + "." + file.getOriginalFilename()+ "." + "jpg");
+                            imageService.save(image);
 
-                    Image image = new Image();
-                    image.setData(file.getBytes());
-                    image.setName(uuidFile + "." + file.getOriginalFilename());
-                    image.setPath(uploadPath);
-                    image.setImageOffer(offer);
-                    imageService.save(image);
-                    images.add(image);
-                    offer.setImages(images);
+                            try {
+                                Files.write(fileNameAndPath, file.getBytes());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
-                    try {
-                        Files.write(fileNameAndPath, file.getBytes());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
             }
 
        // model.addAttribute("msg", "Successfully uploaded files "+fileNames.toString());

@@ -1,6 +1,8 @@
 package com.marketplace.project.entities;
 
 import com.marketplace.project.entities.enums.ConditionType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +53,9 @@ public class Offer {
 //  @Enumerated(EnumType.STRING)
     private Category category;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
-    private List<Image> images;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Image> images = new ArrayList<>();
 
     @ManyToOne
     private User seller;
