@@ -15,6 +15,9 @@ public interface OfferRepository extends JpaRepository<Offer, Integer> {
     @Query(value = "SELECT * FROM offer as o WHERE o.status = true  ORDER BY o.creation_time DESC", nativeQuery = true)
     List<Offer> findAllActiveOffer();
 
+    @Query(value = "SELECT * FROM offer as o, image as i WHERE i.image_offer_id = o.id", nativeQuery = true)
+    List<Offer> findAllOffersWithImages();
+
     List<Offer> findByTitle (String title);
 
     List<Offer> findBySeller (Optional<User> user);

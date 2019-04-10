@@ -21,7 +21,7 @@ public class Image {
     @Lob
     private byte[] data;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne
     private Offer imageOffer;
 
     public Image() {

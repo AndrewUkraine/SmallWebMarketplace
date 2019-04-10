@@ -106,19 +106,18 @@ public class OfferController {
         user.getSellList().add(offer);
         offerRepository.save(offer);
 
-
         StringBuilder fileNames = new StringBuilder();
 
-       List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
-
-        int size= files.size() + offer.getImages().size();
-        //offer.getImages().size()
-        if (files.size()>5 || images.size()>5 || size>5)
-        {
-          model.addAttribute("total", "You can't upload more then 5 photos. Now you are trying save " + files.size() + " but alredy have " + images.size() + " Total " + size);
-          return "excaption";
-
-        }
+        List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
+//
+//        int size= files.size() + offer.getImages().size();
+//        //offer.getImages().size()
+//        if (files.size()>5 || images.size()>5 || size>5)
+//        {
+//          model.addAttribute("total", "You can't upload more then 5 photos. Now you are trying save " + files.size() + " but alredy have " + images.size() + " Total " + size);
+//          return "excaption";
+//
+//        }
                 for (MultipartFile file : files) {
                     if (!file.isEmpty() && file.getOriginalFilename()!=null && file.getContentType().equals("image/jpeg")) {
                         String uuidFile = UUID.randomUUID().toString();
@@ -129,8 +128,8 @@ public class OfferController {
                             image.setData(file.getBytes());
                             image.setName(uuidFile + "." + file.getOriginalFilename());
                             image.setPath(uploadPath);
-                            image.setImageOffer(offer);
 
+                            image.setImageOffer(offer);
 
                             offer.getImages().add(image);
 
@@ -184,10 +183,13 @@ public class OfferController {
     //edit offer
     @GetMapping(value = "offer/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
-        model.addAttribute("offer", offerRepository.findById(id));
+
+        model.addAttribute("offer",  offerRepository.findById(id).get());
         model.addAttribute("conditions", ConditionType.values());
         model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("images", imageRepository.getAllByImageOffer(offerRepository.findById(id)));
+        //model.addAttribute("img", offerRepository.findAllOffersWithImages()); //custom
+
+       // model.addAttribute("images", imageRepository.getAllByImageOffer(offerRepository.findById(id)));
         return "updateOffer";
     }
 

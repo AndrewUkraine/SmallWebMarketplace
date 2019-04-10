@@ -39,7 +39,7 @@ public class UserController {
 
 
     // Add new User +++
-    @Transactional
+   // @Transactional
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String addNewUser(@ModelAttribute User user, Map<String, Object> model) {
 

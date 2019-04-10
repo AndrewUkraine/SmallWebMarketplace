@@ -53,8 +53,8 @@ public class Offer {
 //  @Enumerated(EnumType.STRING)
     private Category category;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
-    @Fetch(value = FetchMode.SUBSELECT)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "imageOffer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    //@Fetch(value = FetchMode.SUBSELECT)
     private List<Image> images = new ArrayList<>();
 
     @ManyToOne

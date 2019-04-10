@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="" lang="">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="" xmlns:text-align="http://www.w3.org/1999/xhtml" lang="">
 
 <head>
     <title>Edit Offer</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css"
-          href="/../webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 
 <body>
 <h2>Edit Offer</h2>
 
-<form class="form-horizontal" th:action="@{/offer}" enctype="multipart/form-data" th:object="${offer}" method="post">
+<form th:action="@{/offer}" enctype="multipart/form-data" th:object="${offer}" method="post">
 
     <div class="container">
 
+        <label class="col-sm-2 control-label">Condition:</label>
         <select th:field="*{condition}">
             <option th:each="con : ${conditions}"
                     th:value="${con}"
@@ -28,7 +30,7 @@
             <div class="col-sm-10">
                 <label>
                     <input type="text" name="offerDescription" class="form-control"
-                           th:value="${offer.get().offerDescription}"/>
+                           th:value="*{offerDescription}"/>
                 </label>
             </div>
 
@@ -38,12 +40,13 @@
             <label class="col-sm-2 control-label">Price:</label>
             <div class="col-sm-10">
                 <input type="text" name="price" placeholder="Price" class="form-control"
-                       th:value="${offer.get().price}"/>
+                       th:value="*{price}"/>
             </div>
         </div>
 
 
         <div class="form-check">
+            <label class="col-sm-2 control-label">Do Offer Active Immediately.:</label>
             <input type="checkbox" name="status" th:field="*{status}"/>
         </div>
 
@@ -52,7 +55,7 @@
             <label class="col-sm-2 control-label">Title:</label>
             <div class="col-sm-10">
                 <label>
-                    <input type="text" name="title" class="form-control" th:value="${offer.get().title}"/>
+                    <input type="text" name="title" class="form-control" th:value="*{title}"/>
                 </label>
             </div>
         </div>
@@ -66,42 +69,118 @@
         </select>
 
 
-        <input type="hidden" name="id" class="form-control" th:value="${offer.get().id}"/>
+        <input type="hidden" name="id" class="form-control" th:value="*{id}"/>
 
-        <input type="hidden" name="created" class="form-control" th:value="${offer.get().getCreated()}"/>
+
+        <input type="hidden" name="created" class="form-control" th:value="*{getCreated()}"/>
+
+
+
 
         <div>
             <ul>
-                <li class="img-thumbnail" th:each="file : ${images}">
-                    <div class="photo" th:id="${file.id}">
-                        <img th:width="200px" th:src="@{'/images/' + ${file.getName()}}"/>
+                <li class="img-thumbnail" name="images" th:each="image : *{images}">
+                    <div class="photo" th:id="${image.getId()}">
+                        <img class="img-thumbnail" th:width="200px" th:src="@{'/images/' + ${image.getName()}}"/>
 
-                        <input type="checkbox" name="activFoto" th:accept="${file.activFoto}"/>
 
-                        <button th:data-img="${file.id}" class="remove-pic-btn">Delete</button>
+
+
+                        <input type="checkbox" name="activFoto" th:accept="${image.activFoto}"/>
+
+                        <button th:data-img="${image.getId()}" class="remove-pic-btn">Delete</button>
+
+                        <img type="hidden" name="images" th:list="${offer.getImages()}"/>
+
                     </div>
+
                 </li>
             </ul>
+        </div>
+
+        <!--<ul class="container">-->
+
+        <!--<style>-->
+        <!--.thumb img  {-->
+        <!--padding: 5px; /* Расстояние от картинки до рамки */-->
+        <!--margin-right: 10px; /* Отступ справа */-->
+        <!--margin-bottom: 10px; /* Отступ снизу */-->
+        <!--}-->
+
+        <!--</style>-->
+
+        <!--<li  th:each="image : ${offer.get().getImages()}">-->
+        <!--<img class="img-thumbnail" alt="" th:width="200px" th:src="@{'/images/' + ${image.getName()}}"/>-->
+
+
+        <!--<input type="checkbox" name="activFoto" th:accept="${image.activFoto}"/>-->
+
+        <!--&lt;!&ndash;<p th:img="${image.setImageOffer(offer)}">&ndash;&gt;-->
+
+        <!--<button th:data-img="${image.id}" class="remove-pic-btn">Delete</button>-->
+
+        <!--</li>-->
+        <!--</ul>-->
+
+
+        <div class="content">
+
+            <!-- Область для перетаскивания -->
+            <div id="drop-files" ondragover="return false">
+                <p>Drag yore pictures here</p>
+                <form id="frm">
+                    <input type="file" name="files" id="uploadbtn"  multiple/>
+                </form>
+            </div>
+            <!-- Область предпросмотра -->
+            <div id="uploaded-holder">
+                <div id="dropped-files">
+                    <!-- Кнопки загрузить и удалить, а также количество файлов -->
+                    <div id="upload-button">
+                        <center>
+                            <span>0 Файлов</span>
+                            <a href="#" class="upload">Загрузить</a>
+                            <a href="#" class="delete">Удалить</a>
+                            <!-- Прогресс бар загрузки -->
+                            <div id="loading">
+                                <div id="loading-bar">
+                                    <div class="loading-color"></div>
+                                </div>
+                                <div id="loading-content"></div>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+            </div>
+            <!-- Список загруженных файлов -->
+            <div id="file-name-holder">
+                <ul id="uploaded-files">
+                    <h1>Загруженные файлы</h1>
+                </ul>
+            </div>
 
         </div>
 
-        <input type="file"  name="files" multiple>
 
+        <p><input type="submit" value="Submit" id="submitBtn"/> <input type="reset" value="Reset"/></p>
 
-        <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+    </div>
 
-
-        <!-- should proccesing exceptions. But not working -->
-        <div th:if ="${#fields.hasErrors('*')}" class="alert alert-danger">
-            <p>Errors:</p>
-            <ul>
-                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Validation errors</li>
-            </ul>
-        </div>
+</form>
 
 </body>
 
+
 <script src="http://localhost:8080/static/js/js.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+
+<!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+
+<script src="http://localhost:8080/static/js/javascript.js"></script>
+
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/static/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/static/css/header.css">
+
 
 </html>
 
