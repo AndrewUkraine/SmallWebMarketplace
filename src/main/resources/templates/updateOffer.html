@@ -84,13 +84,11 @@
                         <img class="img-thumbnail" th:width="200px" th:src="@{'/images/' + ${image.getName()}}"/>
 
 
-
-
                         <input type="checkbox" name="activFoto" th:accept="${image.activFoto}"/>
 
                         <button th:data-img="${image.getId()}" class="remove-pic-btn">Delete</button>
 
-                        <img type="hidden" name="images" th:list="${offer.getImages()}"/>
+                        <!--<img type="hidden" name="images" th:list="${offer.getImages()}"/>-->
 
                     </div>
 

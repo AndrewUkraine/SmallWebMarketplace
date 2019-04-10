@@ -97,7 +97,7 @@ public class OfferController {
 
     //save offer
     @RequestMapping(value = "offer", method = RequestMethod.POST)
-    public String saveOffer (@AuthenticationPrincipal User user,  @ModelAttribute Offer offer, @RequestParam("files")  List<MultipartFile> files, @ModelAttribute Image image, Model model) throws IOException {
+    public String saveOffer (@AuthenticationPrincipal User user,  @ModelAttribute Offer offer, @RequestParam("files")  List<MultipartFile> files, @ModelAttribute Image images, Model model) throws IOException {
 
         LocalDateTime today = LocalDateTime.now();
         offer.setCreationTimeAndDate(today);
@@ -108,7 +108,7 @@ public class OfferController {
 
         StringBuilder fileNames = new StringBuilder();
 
-        List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
+        //List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
 //
 //        int size= files.size() + offer.getImages().size();
 //        //offer.getImages().size()
@@ -125,15 +125,15 @@ public class OfferController {
 
                             fileNames.append(uuidFile).append(".").append(file.getOriginalFilename()).append(".").append("jpg");
 
-                            image.setData(file.getBytes());
-                            image.setName(uuidFile + "." + file.getOriginalFilename());
-                            image.setPath(uploadPath);
+                            Image image1 = new Image();
+                        image1.setData(file.getBytes());
+                        image1.setName(uuidFile + "." + file.getOriginalFilename());
+                        image1.setPath(uploadPath);
+                        image1.setImageOffer(offer);
 
-                            image.setImageOffer(offer);
+                            offer.getImages().add(image1);
 
-                            offer.getImages().add(image);
-
-                            imageService.save(image);
+                            imageService.save(image1);
 
                             try {
                                 Files.write(fileNameAndPath, file.getBytes());
