@@ -16,13 +16,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService  {
 
     private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public void updatePassword(String password, Integer userId) {
+        userRepository.updatePassword(password, userId);
     }
 
 //    public Iterable<User> findAll(){
@@ -74,10 +78,7 @@ public class UserService implements UserDetailsService {
 //    }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email);
-    }
+
     }
 
 //    public User getWithOffers(int id) {

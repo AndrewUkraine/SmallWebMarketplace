@@ -1,44 +1,60 @@
 package com.marketplace.project.entities;
 
+import com.marketplace.project.constraint.FieldMatch;
 import com.marketplace.project.entities.enums.RoleType;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
-//@NamedNativeQuery(name = User.FIND_USER_BY_CITY, query = "SELECT user.* FROM user WHERE user.city = ?", resultClass = User.class)
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@FieldMatch.List({
+        @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match"),
+})
 public class User implements UserDetails {
-    //public static final String FIND_USER_BY_CITY = "User.findByCity";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "FIRST_NAME", length = 30, nullable = false)
+    @NotBlank (message = "Must by not empty")
     private String firsName;
 
     @Column(name = "LAST_NAME", length = 30)
+    @NotBlank (message = "Must by not empty")
     private String secondName;
 
     @Column(name = "EMAIL", unique = true, nullable = false, length = 60)
+    @NotBlank (message = "Must by not empty")
     private String email;
 
     @Column(name = "PASSWORD", nullable = false, length = 100)
-   // @Transient
     @NotBlank (message = "Must by not empty")
     private String password;
 
+    @NotBlank (message = "Must by not empty")
+    private String matchingPassword;
+
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
+    @Pattern(regexp="(^$|[0-9]{10})")
+    @NotBlank(message = "Must by not empty")
     private String phone;
 
     @Column(name = "CITY", length = 60, nullable = false)
+    @NotBlank(message = "Must by not empty")
     private String city;
 
     @Column(name = "`ACTIVE`", length = 30)
@@ -51,10 +67,15 @@ public class User implements UserDetails {
 
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "seller", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @BatchSize(size = 200) //get results partly (200)
     private List<Offer> sellList;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> purchasedItems;
+
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    private PasswordResetToken passwordResetToken;
 
 
     @Column(name = "createdTime", updatable = false)
@@ -63,6 +84,10 @@ public class User implements UserDetails {
 
     @Column(name = "updatedTime")
     private Date updated;
+
+
+    @AssertTrue
+    private Boolean terms;
 
     @PrePersist
     protected void onCreate() {
@@ -209,4 +234,27 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getMatchingPassword() {
+        return matchingPassword;
+    }
+
+    public void setMatchingPassword(String matchingPassword) {
+        this.matchingPassword = matchingPassword;
+    }
+
+    public PasswordResetToken getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(PasswordResetToken passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public Boolean getTerms() {
+        return terms;
+    }
+
+    public void setTerms(Boolean terms) {
+        this.terms = terms;
+    }
 }

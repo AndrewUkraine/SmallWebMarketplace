@@ -131,7 +131,7 @@ public class OfferController {
                         image1.setPath(uploadPath);
                         image1.setImageOffer(offer);
 
-                            offer.getImages().add(image1);
+                           offer.getImages().add(image1);
 
                             imageService.save(image1);
 

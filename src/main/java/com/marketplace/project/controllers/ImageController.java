@@ -23,17 +23,8 @@ public class ImageController {
     @Autowired
     private ImageRepository imageRepository;
 
-    @Autowired
-    private OfferRepository offerRepository;
-
-
     //Save the uploaded file to this folder
     private static String UPLOADED_FOLDER = "/Users/andriishatov/IdeaProjects/SmallWebMarketplace/src/main/resources/static/images/";
-
-    @GetMapping(value = "/images")
-    public String index() {
-        return "upload";
-    }
 
     @PostMapping(value = "/upload")
     public String singleFileUpload(@RequestParam("file") MultipartFile file,
@@ -60,38 +51,6 @@ public class ImageController {
 
         return "redirect:/uploadStatus";
     }
-
-    @GetMapping("/uploadStatus")
-    public String uploadStatus() {
-        return "uploadStatus";
-    }
-
-
-
-    //add new Image
-    @GetMapping(path = "/image")
-    public @ResponseBody
-    String addNewImage(@RequestParam String name, @RequestParam String path) {
-
-        Image image = new Image();
-        //Offer offer = new Offer();
-        image.setName(name);
-        image.setPath(path);
-        image.setImageOffer(image.getImageOffer());
-        imageRepository.save(image);
-
-
-        return "SaveImage";
-    }
-
-    //get Image
-    @GetMapping(path = "/getimage")
-    public @ResponseBody
-    Iterable<Image> getAllUsers(Image name, Model model) {
-        model.addAttribute("name", name);
-        return imageRepository.findAll();
-    }
-
 
     //delete image
     @RequestMapping(value = "/offer/image/{id}", method = RequestMethod.GET)

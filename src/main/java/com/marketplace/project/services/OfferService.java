@@ -20,7 +20,6 @@ public class OfferService {
     private OfferRepository offerRepository;
     private UserRepository userRepository;
 
-
     @Autowired
     public OfferService(OfferRepository offerRepository, UserRepository userRepository) {
         this.offerRepository = offerRepository;
@@ -64,13 +63,6 @@ public class OfferService {
         offerRepository.deleteAll(entities);
     }
 
-    //To work with new Time package, we need to configure our template engine to use the new Java8TimeDialect:
-    private ISpringTemplateEngine templateEngine(ITemplateResolver templateResolver) {
-        SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.addDialect(new Java8TimeDialect());
-        engine.setTemplateResolver(templateResolver);
-        return engine;
-    }
 }
 
 

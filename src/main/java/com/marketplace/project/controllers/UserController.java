@@ -1,7 +1,10 @@
 package com.marketplace.project.controllers;
 
+import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
+import com.marketplace.project.entities.Image;
+import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
 import com.marketplace.project.entities.enums.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +13,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.io.File;
 import java.util.*;
 
 @Controller
-//@RequestMapping(value = "/user")
+@RequestMapping("/registration")
 public class UserController {
 
     @Autowired
@@ -25,38 +30,42 @@ public class UserController {
     @Autowired
     private OfferRepository offerRepository;
 
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("user", new User());
-        return "registrationPage";
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @ModelAttribute("user")
+    public Model registration(Model model) {
+       return model.addAttribute("user", new User());
     }
 
-    @GetMapping("/update-user")
-    public String updateUser(@AuthenticationPrincipal User user,  Model model) {
-        model.addAttribute("user", user);
-        return "updateUser";
+    @GetMapping
+    public String showRegistrationForm(Model model) {
+        return "registration";
     }
 
-
-    // Add new User +++
-   // @Transactional
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String addNewUser(@ModelAttribute User user, Map<String, Object> model) {
+    //Save/Update user
+    @PostMapping
+    public String addNewUser(@ModelAttribute ("user") @Valid User user, BindingResult result) {
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-        if (user.getId() == null)
-        {
-            model.put("message", "User doesn't exists!");
+        User existing = userRepository.findByEmail(user.getEmail());
+
+        if (existing != null){
+            result.rejectValue("email", null, "There is already an account registered with that email");
         }
+        if (result.hasErrors()){
+            return "registration";
+        }
+
 
         user.setRoles(Collections.singleton(RoleType.USER));
         user.setActive(true);
+        user.setMatchingPassword(passwordEncoder.encode(user.getMatchingPassword()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        return "redirect:/login";
-
+        return "redirect:/registration?success";
     }
 
     // Update User
@@ -76,6 +85,11 @@ public class UserController {
         return "allUsers";
     }
 
+    @GetMapping("/update-user")
+    public String updateUser(@AuthenticationPrincipal User user,  Model model) {
+        model.addAttribute("user", user);
+        return "updateUser";
+    }
 
     //get User By Email
     @GetMapping(path = "/email/{email}")
@@ -97,9 +111,30 @@ public class UserController {
     //delete user +++
     @RequestMapping("user/delete/{id}")
     public String deleteOfferById(@PathVariable Integer id, Model model) {
+
+        //get all offers and then remove all images/name
+      List<Offer>  listOffers =  offerRepository.findBySeller(userRepository.findById(id));
+
+      for (Offer offer : listOffers){
+          //delete images from hardware
+          for (Image image : offer.getImages()) {
+              if (!image.getName().isEmpty()) {
+                  File file = new File(image.getPath() + image.getName());
+                  if (file.delete()) {
+                      System.out.println(file.getName() + " is deleted!");
+                  }
+              }
+
+          }
+      }
         userRepository.deleteById(id);
         model.addAttribute("users", userRepository.findAll());
-        return "redirect:/users";
+        return "redirect:/users"; //registration
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
     }
 
 }

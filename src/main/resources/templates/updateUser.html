@@ -28,6 +28,15 @@
         <input type="hidden" th:field="*{active}" />
         <!--<input type="hidden" th:field="*{created}" />-->
 
+        <div>
+            <input id="oldpass" name="oldpassword" type="password" />
+            <input id="pass" name="password" type="password" />
+            <input id="passConfirm" type="password" />
+            <span id="error" style="display:none">Password mismatch</span>
+
+            <button type="submit" onclick="savePass()">Change Password</button>
+        </div>
+
 
         <input type="file" name="file" multiple>
 
@@ -35,6 +44,7 @@
     </form>
 
 
+    <script src="jquery.min.js"></script>
 
 </body>
 </html>
