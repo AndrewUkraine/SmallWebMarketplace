@@ -12,7 +12,7 @@
 <h2>New User</h2>
 <div class="container">
 
-    <form  th:action="@{/update}" th:object="${user}" enctype="multipart/form-data" method="post">
+    <form  th:action="@{/registration}" th:object="${user}" enctype="multipart/form-data" method="post">
 
 
         <p>Firs Name: <input placeholder="Firs Name" type="text" th:field="*{firsName}" required="" /></p>
@@ -45,6 +45,8 @@
 
 
     <script src="jquery.min.js"></script>
+
+</div>
 
 </body>
 </html>
