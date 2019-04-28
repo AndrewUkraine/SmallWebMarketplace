@@ -20,9 +20,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-@FieldMatch.List({
-        @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match"),
-})
 public class User implements UserDetails {
 
     @Id
@@ -45,8 +42,16 @@ public class User implements UserDetails {
     @NotBlank (message = "Must by not empty")
     private String password;
 
-    @NotBlank (message = "Must by not empty")
+
     private String matchingPassword;
+
+    public String getMatchingPassword() {
+        return matchingPassword;
+    }
+
+    public void setMatchingPassword(String matchingPassword) {
+        this.matchingPassword = matchingPassword;
+    }
 
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     @Pattern(regexp="(^$|[0-9]{10})")
@@ -234,14 +239,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public String getMatchingPassword() {
-        return matchingPassword;
-    }
-
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
-    }
-
     public PasswordResetToken getPasswordResetToken() {
         return passwordResetToken;
     }
@@ -257,4 +254,5 @@ public class User implements UserDetails {
     public void setTerms(Boolean terms) {
         this.terms = terms;
     }
+
 }

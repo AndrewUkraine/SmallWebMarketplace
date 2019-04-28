@@ -1,16 +1,14 @@
 package com.marketplace.project.controllers;
 
-import com.marketplace.project.dao.jpadatarepository.ImageRepository;
 import com.marketplace.project.dao.jpadatarepository.OfferRepository;
 import com.marketplace.project.dao.jpadatarepository.UserRepository;
+import com.marketplace.project.dao.jpadatarepository.UserRepositoryDto;
 import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
-import com.marketplace.project.entities.enums.RoleType;
+import com.marketplace.project.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +19,7 @@ import java.io.File;
 import java.util.*;
 
 @Controller
-@RequestMapping("/registration")
+@RequestMapping(value = { "/registration","/update" }) //two mapping
 public class UserController {
 
     @Autowired
@@ -31,11 +29,11 @@ public class UserController {
     private OfferRepository offerRepository;
 
     @Autowired
-    private ImageRepository imageRepository;
+    private UserRepositoryDto userRepositoryDto;
 
     @ModelAttribute("user")
     public Model registration(Model model) {
-       return model.addAttribute("user", new User());
+       return model.addAttribute("user", new UserRegistrationDto());
     }
 
     @GetMapping
@@ -43,39 +41,44 @@ public class UserController {
         return "registration";
     }
 
-    //Save/Update user
+    //SaveUser
     @PostMapping
-    public String addNewUser(@ModelAttribute ("user") @Valid User user, BindingResult result) {
+    public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result) {
 
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        User existingEmail = userRepository.findByEmail(user.getEmail());
 
-        User existing = userRepository.findByEmail(user.getEmail());
+        User existingPhone = userRepository.findByPhone(user.getPhone());
 
-        if (existing != null){
+        if (existingEmail != null){
             result.rejectValue("email", null, "There is already an account registered with that email");
         }
+        if (existingPhone != null){
+            result.rejectValue("phone", null, "There is already an account registered with that phone");
+        }
+
         if (result.hasErrors()){
             return "registration";
         }
 
-
-        user.setRoles(Collections.singleton(RoleType.USER));
-        user.setActive(true);
-        user.setMatchingPassword(passwordEncoder.encode(user.getMatchingPassword()));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepositoryDto.saveNewUser(user);
 
         return "redirect:/registration?success";
     }
 
     // Update User
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateUser(@ModelAttribute User user, Map<String, Object> model) {
+    @PostMapping (value = "update")
+    public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute ("user") @Valid UserRegistrationDto userupdate, BindingResult results) {
 
-            userRepository.save(user);
-            return "redirect:/offers";
+     userRepository.findById(user.getId());
+
+        user.setFirsName(userupdate.getFirsName());
+        user.setSecondName(userupdate.getSecondName());
+        user.setCity(userupdate.getCity());
+
+userRepository.save(user);
+
+        return "redirect:/registration?success";
     }
-
 
     //Get User by Id
     @GetMapping(value = "/user-{id}")
@@ -90,16 +93,6 @@ public class UserController {
         model.addAttribute("user", user);
         return "updateUser";
     }
-
-    //get User By Email
-    @GetMapping(path = "/email/{email}")
-    public @ResponseBody
-    User findByEmail(@PathVariable String email, Model model) {
-        User user = userRepository.findByEmail(email);
-        model.addAttribute("users", userRepository.findByEmail(email));
-        return user;
-    }
-
 
     //get All users +++
     @GetMapping(path = "/users")

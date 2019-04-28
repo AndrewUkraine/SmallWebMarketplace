@@ -13,11 +13,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByEmail(String email);
 
+    User findByPhone(String email);
+
     @Modifying
     @Query(value = "update User u set u.password = :password where u.id = :id", nativeQuery = true)
     void updatePassword(@Param("password") String password, @Param("id") Integer id);
-
-    User save(UserRegistrationDto registration);
-
 
 }
