@@ -75,19 +75,38 @@ public class UserController {
 
         userRepository.findById(user.getId());
 
-//        if (userupdate.getPassword()==null || userupdate.getPassword().isEmpty())
-//        {
-//            user.setPassword(user.getPassword());
-//        }
+        if (!userupdate.getMatchingPassword().isEmpty())
+        {
+            if (passwordEncoder.matches(userupdate.getPassword(), user.getPassword()))
+            {
+            user.setPassword(passwordEncoder.encode(userupdate.getMatchingPassword()));
+            }
+            else {
+                results.rejectValue("password", null, "You must confirm current password");
+                return "updateUser";
+            }
+        }
+
+        if (userupdate.getFirsName().isEmpty()) {
+            results.hasErrors();
+            return "updateUser";
+        }
+
+
+        if (userupdate.getSecondName().isEmpty()){
+            results.hasErrors();
+            return "updateUser";
+        }
+
+
+        if(userupdate.getCity().isEmpty()){
+            results.hasErrors();
+            return "updateUser";
+        }
 
         user.setFirsName(userupdate.getFirsName());
         user.setSecondName(userupdate.getSecondName());
         user.setCity(userupdate.getCity());
-
-        if (results.hasErrors()){
-            return "updateUser";
-        }
-
         userRepository.save(user);
 
         return "redirect:/registration/update-user?success";
@@ -110,8 +129,9 @@ public class UserController {
         userRegistrationDto.setPassword(user.getPassword());
         userRegistrationDto.setEmail(user.getEmail());
         userRegistrationDto.setPhone(user.getPhone());
+       // userRegistrationDto.getMatchingPassword();
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", userRegistrationDto);
         return "updateUser";
     }
 
