@@ -9,6 +9,8 @@ import com.marketplace.project.entities.User;
 import com.marketplace.project.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,15 +71,26 @@ public class UserController {
     @PostMapping (value = "update")
     public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute ("user") @Valid UserRegistrationDto userupdate, BindingResult results) {
 
-     userRepository.findById(user.getId());
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        userRepository.findById(user.getId());
+
+//        if (userupdate.getPassword()==null || userupdate.getPassword().isEmpty())
+//        {
+//            user.setPassword(user.getPassword());
+//        }
 
         user.setFirsName(userupdate.getFirsName());
         user.setSecondName(userupdate.getSecondName());
         user.setCity(userupdate.getCity());
 
-userRepository.save(user);
+        if (results.hasErrors()){
+            return "updateUser";
+        }
 
-        return "redirect:/registration?success";
+        userRepository.save(user);
+
+        return "redirect:/registration/update-user?success";
     }
 
     //Get User by Id
@@ -89,7 +102,15 @@ userRepository.save(user);
     }
 
     @GetMapping("/update-user")
-    public String updateUser(@AuthenticationPrincipal User user,  Model model) {
+    public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute UserRegistrationDto userRegistrationDto,  Model model) {
+
+        userRegistrationDto.setFirsName(user.getFirsName());
+        userRegistrationDto.setSecondName(user.getSecondName());
+        userRegistrationDto.setCity(user.getCity());
+        userRegistrationDto.setPassword(user.getPassword());
+        userRegistrationDto.setEmail(user.getEmail());
+        userRegistrationDto.setPhone(user.getPhone());
+
         model.addAttribute("user", user);
         return "updateUser";
     }

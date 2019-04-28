@@ -1,16 +1,11 @@
 package com.marketplace.project.entities;
 
-import com.marketplace.project.constraint.FieldMatch;
 import com.marketplace.project.entities.enums.RoleType;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
@@ -42,16 +37,6 @@ public class User implements UserDetails {
     @NotBlank (message = "Must by not empty")
     private String password;
 
-
-    private String matchingPassword;
-
-    public String getMatchingPassword() {
-        return matchingPassword;
-    }
-
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
-    }
 
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     @Pattern(regexp="(^$|[0-9]{10})")
