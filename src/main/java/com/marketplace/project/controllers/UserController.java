@@ -7,6 +7,7 @@ import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.Offer;
 import com.marketplace.project.entities.User;
 import com.marketplace.project.web.dto.UserRegistrationDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.io.File;
 import java.util.*;
@@ -75,6 +75,15 @@ public class UserController {
 
         userRepository.findById(user.getId());
 
+        User existingPhone = userRepository.findByPhone(userupdate.getPhone());
+
+        if (existingPhone!=null && !existingPhone.getId().equals(user.getId()))
+        {
+            results.rejectValue("phone", null, "You can't use this phone. There is already an account registered with that phone");
+            return "updateUser";
+        }
+
+
         if (!userupdate.getUpdateNewPassword().isEmpty())
         {
 
@@ -96,6 +105,11 @@ public class UserController {
             }
         }
 
+        if (userupdate.getPhone().isEmpty()) {
+            results.hasErrors();
+            return "updateUser";
+        }
+
         if (userupdate.getFirsName().isEmpty()) {
             results.hasErrors();
             return "updateUser";
@@ -113,6 +127,7 @@ public class UserController {
             return "updateUser";
         }
 
+        user.setPhone(userupdate.getPhone());
         user.setFirsName(userupdate.getFirsName());
         user.setSecondName(userupdate.getSecondName());
         user.setCity(userupdate.getCity());
