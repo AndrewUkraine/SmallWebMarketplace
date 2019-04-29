@@ -75,12 +75,21 @@ public class UserController {
 
         userRepository.findById(user.getId());
 
-        if (!userupdate.getMatchingPassword().isEmpty())
+        if (!userupdate.getUpdateNewPassword().isEmpty())
         {
+
+            if (!userupdate.getUpdateNewPassword().equals(userupdate.getMatchingPassword()))
+            {
+                results.rejectValue("updateNewPassword", null, "The password fields must match");
+                results.rejectValue("matchingPassword", null, "The password fields must match");
+                return "updateUser";
+            }
+
             if (passwordEncoder.matches(userupdate.getPassword(), user.getPassword()))
             {
-            user.setPassword(passwordEncoder.encode(userupdate.getMatchingPassword()));
+               user.setPassword(passwordEncoder.encode(userupdate.getUpdateNewPassword()));
             }
+
             else {
                 results.rejectValue("password", null, "You must confirm current password");
                 return "updateUser";
@@ -129,7 +138,7 @@ public class UserController {
         userRegistrationDto.setPassword(user.getPassword());
         userRegistrationDto.setEmail(user.getEmail());
         userRegistrationDto.setPhone(user.getPhone());
-       // userRegistrationDto.getMatchingPassword();
+
 
         model.addAttribute("user", userRegistrationDto);
         return "updateUser";

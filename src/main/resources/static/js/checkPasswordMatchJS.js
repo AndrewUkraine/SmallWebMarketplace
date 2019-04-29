@@ -1,13 +1,13 @@
 
 function checkPasswordMatch() {
-   // debugger;
-    var password = $("#txtNewPassword").val();
-    var confirmPassword = $("#txtConfirmPassword").val();
+    debugger;
+    var password = $("#updateNewPassword").val();
+    var confirmPassword = $("#matchingPassword").val();
 
     if (password != confirmPassword){
         $("#divCheckPasswordMatch").html("<div style='color:red'>Passwords do not match!</div>");
-        document.getElementById("txtNewPassword").value = null;
-        document.getElementById("txtConfirmPassword").value = null;}
+        document.getElementById("updateNewPassword").value = null;
+        document.getElementById("matchingPassword").value = null;}
 
 
     else{

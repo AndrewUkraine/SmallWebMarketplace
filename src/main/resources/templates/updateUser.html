@@ -109,6 +109,25 @@
                                        th:text="${error}">Validation error</p>
                                 </div>
 
+
+
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('updateNewPassword')}? 'has-error':''">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-lock"></i>
+                                        </span>
+                                        <input id="updateNewPassword"
+                                               class="form-control"
+                                               type="password"
+                                               placeholder="New Password"
+                                               th:field="*{updateNewPassword}"/>
+                                    </div>
+                                    <p class="error-message"
+                                       th:each="error: ${#fields.errors('updateNewPassword')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+
                                 <div class="form-group"
                                      th:classappend="${#fields.hasErrors('matchingPassword')}? 'has-error':''">
                                     <div class="input-group">
@@ -118,7 +137,7 @@
                                         <input id="matchingPassword"
                                                class="form-control"
                                                type="password"
-                                               placeholder="New Password"
+                                               placeholder="Confirm Password"
                                                th:field="*{matchingPassword}"/>
                                     </div>
                                     <p class="error-message"
@@ -185,6 +204,7 @@
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script src="http://localhost:8080/static/js/checkPasswordMatchJS.js"></script>
 
 </body>
 </html>

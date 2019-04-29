@@ -49,6 +49,9 @@ public class UserRegistrationDto {
     @NotBlank (message = "Must by not empty")
     private String matchingPassword;
 
+    //@NotBlank (message = "Must by not empty")
+    private String updateNewPassword;
+
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
     @Pattern(regexp="(^$|[0-9]{10})")
     @NotBlank(message = "Must by not empty. And has format: 0(XX)xxxxxxx")
@@ -176,6 +179,14 @@ public class UserRegistrationDto {
 
     public void setRoles(Set<RoleType> roles) {
         this.roles = roles;
+    }
+
+    public String getUpdateNewPassword() {
+        return updateNewPassword;
+    }
+
+    public void setUpdateNewPassword(String updateNewPassword) {
+        this.updateNewPassword = updateNewPassword;
     }
 
 }
