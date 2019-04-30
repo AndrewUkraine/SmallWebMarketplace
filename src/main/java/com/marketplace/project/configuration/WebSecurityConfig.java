@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements U
 
         http
                 .authorizeRequests()
-                .antMatchers("/registration", "/registrationform", "/alloffers", "/static/**", "/webjars/**", "/", "/forgot-password", "/reset-password").permitAll()
+                .antMatchers("/registration", "/registrationform", "/alloffers", "/static/**", "/webjars/**", "/", "/forgot-password", "/reset-password", "/confirm-account", "/confirm-email").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -77,6 +77,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements U
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        else if (!user.isActive()) {
+            throw new UsernameNotFoundException("Confirm profile via email");
         }
 
         return user;
