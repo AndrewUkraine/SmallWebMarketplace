@@ -1,11 +1,8 @@
 package com.marketplace.project.controllers;
 
-import com.marketplace.project.dao.jpadatarepository.OfferRepository;
-import com.marketplace.project.dao.jpadatarepository.UserRepository;
-import com.marketplace.project.dao.jpadatarepository.UserRepositoryDto;
-import com.marketplace.project.entities.Image;
-import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.User;
+import com.marketplace.project.dao.jpadatarepository.*;
+import com.marketplace.project.entities.*;
+import com.marketplace.project.services.EmailService;
 import com.marketplace.project.web.dto.UserRegistrationDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.util.*;
@@ -33,6 +32,12 @@ public class UserController {
     @Autowired
     private UserRepositoryDto userRepositoryDto;
 
+    @Autowired
+    private EmailTokenRepository emailTokenRepository;
+    @Autowired
+    private EmailService emailService;
+
+
     @ModelAttribute("user")
     public Model registration(Model model) {
        return model.addAttribute("user", new UserRegistrationDto());
@@ -45,7 +50,7 @@ public class UserController {
 
     //SaveUser
     @PostMapping
-    public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result) {
+    public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result, HttpServletRequest request) {
 
         User existingEmail = userRepository.findByEmail(user.getEmail());
 
@@ -62,9 +67,30 @@ public class UserController {
             return "registration";
         }
 
-        userRepositoryDto.saveNewUser(user);
+        User userForToken = userRepositoryDto.saveNewUser(user);
 
-        return "redirect:/registration?success";
+        PasswordEmailToken token = new PasswordEmailToken();
+        token.setToken(UUID.randomUUID().toString());
+        token.setUser(userForToken);
+        token.setExpiryDate(30);
+        emailTokenRepository.save(token);
+
+        Mail mail = new Mail();
+        mail.setFrom("testwebmarketplace@gmail.com");
+        mail.setTo(user.getEmail());
+        mail.setSubject("Email confirming request");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("token", token);
+        model.put("user", userForToken);
+        model.put("signature", "https://memorynotfound.com");
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        model.put("resetUrl", url + "/confirm-account?token=" + token.getToken());
+        mail.setModel(model);
+        emailService.sendEmail(mail);
+
+
+        return "redirect:/logout";
     }
 
     // Update User

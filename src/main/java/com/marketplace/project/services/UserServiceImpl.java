@@ -31,11 +31,10 @@ public class UserServiceImpl implements UserRepositoryDto {
         user.setCity(registration.getCity());
         user.setEmail(registration.getEmail());
         user.setPhone(registration.getPhone());
-        user.setActive(true);
+        user.setActive(false);
         user.setTerms(registration.getTerms());
         user.setCreated(registration.getCreated());
         user.setRoles(Collections.singleton(RoleType.USER));
-        user.setActive(true);
 
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
         return userRepository.save(user);
