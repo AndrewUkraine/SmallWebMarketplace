@@ -69,7 +69,7 @@ public class UserController {
 
         User userForToken = userRepositoryDto.saveNewUser(user);
 
-        PasswordEmailToken token = new PasswordEmailToken();
+        EmailToken token = new EmailToken();
         token.setToken(UUID.randomUUID().toString());
         token.setUser(userForToken);
         token.setExpiryDate(30);

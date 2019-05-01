@@ -67,6 +67,8 @@ public class User implements UserDetails {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private PasswordResetToken passwordResetToken;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    private EmailToken emailToken;
 
     @Column(name = "createdTime", updatable = false)
     private Date created;
@@ -240,4 +242,11 @@ public class User implements UserDetails {
         this.terms = terms;
     }
 
+    public EmailToken getEmailToken() {
+        return emailToken;
+    }
+
+    public void setEmailToken(EmailToken emailToken) {
+        this.emailToken = emailToken;
+    }
 }

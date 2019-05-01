@@ -1,19 +1,16 @@
 package com.marketplace.project.dao.jpadatarepository;
 
-import com.marketplace.project.entities.PasswordEmailToken;
-import com.marketplace.project.entities.PasswordResetToken;
+import com.marketplace.project.entities.EmailToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmailTokenRepository extends JpaRepository<PasswordEmailToken, Long> {
+public interface EmailTokenRepository extends JpaRepository<EmailToken, Long> {
 
-    PasswordEmailToken findByToken(String token);
+    EmailToken findByToken(String token);
 
-    @Query(value = "SELECT * FROM password_reset_token WHERE user_id = ?", nativeQuery = true)
-    PasswordEmailToken findAllByUser(Integer userId);
-
-    //PasswordResetToken findAllByUserAndExpiryDate(Integer userId);
+    @Query(value = "SELECT * FROM email_token WHERE user_id = ?", nativeQuery = true)
+    EmailToken findAllByUser(Integer userId);
 
 }
