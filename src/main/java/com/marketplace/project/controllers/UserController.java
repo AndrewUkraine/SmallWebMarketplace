@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.*;
 
 @Controller
-@RequestMapping(value = { "/registration","/update" }) //two mapping
+@RequestMapping(value = { "/registration","/update", "/email" }) //two mapping
 public class UserController {
 
     @Autowired
@@ -106,7 +106,7 @@ public class UserController {
         if (existingPhone!=null && !existingPhone.getId().equals(user.getId()))
         {
             results.rejectValue("phone", null, "You can't use this phone. There is already an account registered with that phone");
-            return "updateUser";
+            return "redirect:/updateUser";
         }
 
 
@@ -170,6 +170,15 @@ public class UserController {
         return "allUsers";
     }
 
+    //Get Email
+    @GetMapping(value = "/email")
+    public String getEmail(@AuthenticationPrincipal User user, EmailToken emailToken, Model model) {
+
+        model.addAttribute("useremail", user);
+        model.addAttribute("emailtoken", emailToken);
+        return "updateEmail";
+    }
+
     @GetMapping("/update-user")
     public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute UserRegistrationDto userRegistrationDto,  Model model) {
 
@@ -219,6 +228,48 @@ public class UserController {
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
+    }
+
+
+    //UpdateEmail
+    @PostMapping (value = "email")
+    public String updateEmail(@AuthenticationPrincipal User user, @ModelAttribute ("token") @Valid EmailToken emailToken, BindingResult result, HttpServletRequest request) {
+
+        User existingEmail = userRepository.findByEmail(emailToken.getEmail());
+
+        if (existingEmail != null){
+            result.rejectValue("email", null, "There is already an account registered with that email");
+        }
+
+        if (result.hasErrors()){
+            return "registration/email";
+        }
+
+       // User userForToken = userRepositoryDto.saveNewUser(user);
+
+        EmailToken token = new EmailToken();
+        token.setToken(UUID.randomUUID().toString());
+        token.setUser(user);
+        token.setEmail(emailToken.getEmail());
+        token.setExpiryDate(30);
+        emailTokenRepository.save(token);
+
+        Mail mail = new Mail();
+        mail.setFrom("testwebmarketplace@gmail.com");
+        mail.setTo(token.getEmail());
+        mail.setSubject("Email confirming request");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("token", token);
+        model.put("user", user);
+        model.put("signature", "https://memorynotfound.com");
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        model.put("resetUrl", url + "/confirm-account?token=" + token.getToken());
+        mail.setModel(model);
+        emailService.sendEmail(mail);
+
+
+        return "redirect:/logout";
     }
 
 }

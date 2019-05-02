@@ -1,6 +1,7 @@
 package com.marketplace.project.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,6 +21,9 @@ public class EmailToken {
 
     @Column(nullable = false)
     private Date expiryDate;
+
+    @Column(name = "EMAIL_CHANGE", unique = true, nullable = false, length = 60)
+    private String email;
 
     public Long getId() {
         return id;
@@ -61,5 +65,13 @@ public class EmailToken {
 
     public boolean isExpired() {
         return new Date().after(this.expiryDate);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

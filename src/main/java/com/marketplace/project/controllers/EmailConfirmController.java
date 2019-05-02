@@ -5,6 +5,7 @@ import com.marketplace.project.dao.jpadatarepository.UserRepository;
 import com.marketplace.project.entities.EmailToken;
 import com.marketplace.project.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +22,7 @@ public class EmailConfirmController {
     private EmailTokenRepository emailTokenRepository;
 
     @RequestMapping(value="/confirm-account")
-    public String handlePasswordReset(@ModelAttribute ("confirm-account") @Valid EmailToken form, Model model,  BindingResult result) {
+    public String handlePasswordReset(@AuthenticationPrincipal User currentUser, @ModelAttribute ("confirm-account") @Valid EmailToken form, Model model, BindingResult result) {
 
         EmailToken token = emailTokenRepository.findByToken(form.getToken());
 
@@ -43,9 +44,9 @@ public class EmailConfirmController {
         {
             user.setActive(true);
         }
-//       else {
-//            user.setEmail(token.getUser().getEmail());
-//        }
+       else {
+            currentUser.setEmail(token.getEmail());
+        }
 
         emailTokenRepository.delete(token);
 
