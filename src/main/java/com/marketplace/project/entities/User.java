@@ -39,7 +39,7 @@ public class User implements UserDetails {
 
 
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Input phone in correct format")
     @NotBlank(message = "Must by not empty")
     private String phone;
 

@@ -25,6 +25,9 @@ public class EmailToken {
     @Column(name = "EMAIL_CHANGE", unique = true, nullable = false, length = 60)
     private String email;
 
+    public EmailToken() {
+    }
+
     public Long getId() {
         return id;
     }

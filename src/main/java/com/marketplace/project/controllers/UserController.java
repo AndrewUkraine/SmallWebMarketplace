@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class UserController {
 
     //SaveUser
     @PostMapping
+    @Transactional
     public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result, HttpServletRequest request) {
 
         User existingEmail = userRepository.findByEmail(user.getEmail());

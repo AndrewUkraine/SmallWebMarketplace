@@ -53,7 +53,7 @@ public class UserRegistrationDto {
     private String updateNewPassword;
 
     @Column(name = "PHONE", length = 30, unique = true, nullable = false)
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Must by not empty. And has format: 0(XX)xxxxxxx")
     @NotBlank(message = "Must by not empty. And has format: 0(XX)xxxxxxx")
     private String phone;
 
