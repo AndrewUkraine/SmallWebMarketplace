@@ -172,15 +172,6 @@ public class UserController {
         return "allUsers";
     }
 
-    //Get Email
-    @GetMapping(value = "/email")
-    public String getEmail(@AuthenticationPrincipal User user, EmailToken emailToken, Model model) {
-
-        model.addAttribute("useremail", user);
-        model.addAttribute("emailtoken", emailToken);
-        return "updateEmail";
-    }
-
     @GetMapping("/update-user")
     public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute UserRegistrationDto userRegistrationDto,  Model model) {
 
@@ -190,7 +181,6 @@ public class UserController {
         userRegistrationDto.setPassword(user.getPassword());
         userRegistrationDto.setEmail(user.getEmail());
         userRegistrationDto.setPhone(user.getPhone());
-
 
         model.addAttribute("user", userRegistrationDto);
         return "updateUser";
@@ -232,61 +222,5 @@ public class UserController {
         return "login";
     }
 
-
-    //UpdateEmail
-    @PostMapping (value = "email")
-    public String updateEmail(@AuthenticationPrincipal User user, @ModelAttribute ("token") @Valid EmailToken emailToken, BindingResult result, HttpServletRequest request, Model modell) {
-//TODO if we wont change email a@blabla to-> @blabla ()same) we get error
-
-        if (emailToken.getEmail().equals(user.getEmail()))
-        {
-            modell.addAttribute("email", "Please, input new email. New e-mail can't match with previous");
-            return "redirect:email";
-        }
-
-
-        User existingEmail = userRepository.findByEmail(emailToken.getEmail());
-
-        if (existingEmail != null){
-            result.rejectValue("email", null, "There is already an account registered with that email");
-            return "registration/email";
-        }
-
-        if (result.hasErrors()){
-            return "registration/email";
-        }
-
-        //if user have token already we delete this token
-        else if (user.getEmailToken().getToken()!=null){
-            EmailToken token = emailTokenRepository.findByToken(user.getEmailToken().getToken());
-            emailTokenRepository.delete(token);
-        }
-
-
-
-        EmailToken token = new EmailToken();
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        token.setEmail(emailToken.getEmail());
-        token.setExpiryDate(30);
-        emailTokenRepository.save(token);
-
-        Mail mail = new Mail();
-        mail.setFrom("testwebmarketplace@gmail.com");
-        mail.setTo(token.getEmail());
-        mail.setSubject("Email confirming request");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "https://memorynotfound.com");
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        model.put("resetUrl", url + "/confirm-account?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);
-
-
-        return "redirect:/logout";
-    }
 
 }

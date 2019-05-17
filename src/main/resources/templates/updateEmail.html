@@ -50,7 +50,7 @@
                                 </div>
                             </form>
 
-                            <form th:action="@{/registration/email}" th:object="${emailtoken}" method="post">
+                            <form th:action="@{/updateEmail}" th:object="${emailtoken}" method="post">
 
                             <div class="form-group"
                                      th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
