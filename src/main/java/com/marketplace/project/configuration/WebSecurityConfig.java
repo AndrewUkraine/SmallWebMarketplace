@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements U
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         else if (!user.isActive()) {
-            throw new UsernameNotFoundException("Confirm profile via email");
+            throw new UsernameNotFoundException("Confirm profile via email.");
         }
 
         return user;

@@ -235,12 +235,21 @@ public class UserController {
 
     //UpdateEmail
     @PostMapping (value = "email")
-    public String updateEmail(@AuthenticationPrincipal User user, @ModelAttribute ("token") @Valid EmailToken emailToken, BindingResult result, HttpServletRequest request) {
+    public String updateEmail(@AuthenticationPrincipal User user, @ModelAttribute ("token") @Valid EmailToken emailToken, BindingResult result, HttpServletRequest request, Model modell) {
+//TODO if we wont change email a@blabla to-> @blabla ()same) we get error
+
+        if (emailToken.getEmail().equals(user.getEmail()))
+        {
+            modell.addAttribute("email", "Please, input new email. New e-mail can't match with previous");
+            return "redirect:email";
+        }
+
 
         User existingEmail = userRepository.findByEmail(emailToken.getEmail());
 
         if (existingEmail != null){
             result.rejectValue("email", null, "There is already an account registered with that email");
+            return "registration/email";
         }
 
         if (result.hasErrors()){

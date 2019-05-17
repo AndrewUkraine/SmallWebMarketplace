@@ -32,6 +32,7 @@ public class EmailService {
             context.setVariables(mail.getModel());
 
             String html = templateEngine.process("email-ex", context);
+            //TODO need check email must not empty and have e-mail format
             helper.setTo(mail.getTo());
 
             helper.setText(html, true);

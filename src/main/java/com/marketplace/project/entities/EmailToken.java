@@ -22,7 +22,7 @@ public class EmailToken {
     @Column(nullable = false)
     private Date expiryDate;
 
-    @Column(name = "EMAIL_CHANGE", unique = true, nullable = false, length = 60)
+    @Column(name = "EMAIL_CHANGE", unique = true, length = 60)
     private String email;
 
     public EmailToken() {

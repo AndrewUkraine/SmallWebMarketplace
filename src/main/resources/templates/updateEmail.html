@@ -52,12 +52,11 @@
 
                             <form th:action="@{/registration/email}" th:object="${emailtoken}" method="post">
 
-
                             <div class="form-group"
                                      th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
                                     <div class="input-group">
                                         <span class="input-group-addon">@</span>
-                                        <input id="email-new"
+                                        <input id="email-new" required
                                                class="form-control"
                                                placeholder="e-mail new"
                                                th:field="*{email}"/>
