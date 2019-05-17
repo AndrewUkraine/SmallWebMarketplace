@@ -256,7 +256,13 @@ public class UserController {
             return "registration/email";
         }
 
-       // User userForToken = userRepositoryDto.saveNewUser(user);
+        //if user have token already we delete this token
+        else if (user.getEmailToken().getToken()!=null){
+            EmailToken token = emailTokenRepository.findByToken(user.getEmailToken().getToken());
+            emailTokenRepository.delete(token);
+        }
+
+
 
         EmailToken token = new EmailToken();
         token.setToken(UUID.randomUUID().toString());
