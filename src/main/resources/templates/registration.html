@@ -81,20 +81,6 @@
                                        th:text="${error}">Validation error</p>
                                 </div>
 
-                                <!--<div class="form-group"-->
-                                     <!--th:classappend="${#fields.hasErrors('confirmEmail')}? 'has-error':''">-->
-                                    <!--<div class="input-group">-->
-                                        <!--<span class="input-group-addon">@</span>-->
-                                        <!--<input id="confirmEmail"-->
-                                               <!--class="form-control"-->
-                                               <!--placeholder="Confirm e-mail"-->
-                                               <!--th:field="*{confirmEmail}"/>-->
-                                    <!--</div>-->
-                                    <!--<p class="error-message"-->
-                                       <!--th:each="error: ${#fields.errors('confirmEmail')}"-->
-                                       <!--th:text="${error}">Validation error</p>-->
-                                <!--</div>-->
-
                                 <div class="form-group"
                                      th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
                                     <div class="input-group">
@@ -179,7 +165,7 @@
 
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-block">Register</button>
+                                    <button type="submit" id = "id" onclick="this.disabled=true; this.value='Submitting...'; this.form.submit();" class="btn btn-success btn-block">Register</button>
                                 </div>
                             </form>
 
@@ -199,8 +185,26 @@
     </div>
 </div>
 
+
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+<script>
+
+    $('#id').on('click', function() {
+        $("#firsName").prop("disabled", true);
+        $("#secondName").prop("disabled", true);
+        $("#email").prop("disabled", true);
+        $("#password").prop("disabled", true);
+        $("#matchingPassword").prop("disabled", true);
+        $("#phone").prop("disabled", true);
+        $("#city").prop("disabled", true);
+        $("#terms").prop("disabled", true);
+        document.getElementById("id").innerHTML="Sending...";
+    });
+
+</script>
 
 </body>
 </html>
