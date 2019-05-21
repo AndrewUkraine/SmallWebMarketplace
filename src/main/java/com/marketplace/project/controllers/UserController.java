@@ -92,7 +92,7 @@ public class UserController {
         emailService.sendEmail(mail);
 
 
-        return "redirect:/logout";
+        return "redirect:/login?ok";
     }
 
     // Update User

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,6 +28,14 @@
                                 </div>
                             </div>
 
+                            <div th:if="${param.ok}">
+                                <div class="alert alert-info">
+                                   Confirm youre account via email.
+                                  <br>  Please, check email confirmation. </br>
+                                </div>
+                            </div>
+
+
                             <div th:if="${param.error}">
                                 <div class="alert alert-danger">
                                     Invalid email or password.
@@ -43,6 +51,7 @@
                                     You successfully reset your password.
                                 </div>
                             </div>
+
 
                             <form th:action="@{/login}" method="post">
                                 <div class="form-group">
