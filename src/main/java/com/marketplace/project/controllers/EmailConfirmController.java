@@ -55,7 +55,7 @@ public class EmailConfirmController {
 
         emailTokenRepository.delete(token);
 
-       return "/confirm-email";
+        return "redirect:/login?account_confirmed";
 
     }
 

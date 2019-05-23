@@ -35,6 +35,13 @@
                                 </div>
                             </div>
 
+                            <div th:if="${param.account_confirmed}">
+                                <div class="alert alert-info">
+                                    Congratulations!
+                                    <br> Your account has been activated and email is verified! </br>
+                                </div>
+                            </div>
+
 
                             <div th:if="${param.error}">
                                 <div class="alert alert-danger">
