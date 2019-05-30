@@ -1,23 +1,14 @@
 package com.marketplace.project.web.dto;
 
 import com.marketplace.project.constraint.FieldMatch;
-import com.marketplace.project.entities.Offer;
-import com.marketplace.project.entities.PasswordResetToken;
 import com.marketplace.project.entities.enums.RoleType;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @FieldMatch.List({
@@ -46,7 +37,7 @@ public class UserRegistrationDto {
     @Enumerated(EnumType.STRING)
     private Set<RoleType> roles;
 
-    @NotBlank (message = "Must by not empty")
+    //@NotBlank //(message = "Must by not empty")
     private String matchingPassword;
 
     //@NotBlank (message = "Must by not empty")

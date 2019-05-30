@@ -106,3 +106,20 @@ h1 {
 .tab input[type=radio]:checked + label::after {
     transform: rotateX(180deg);
 }
+
+.btn1{
+    height: 30px;
+    width: 80px;
+    margin-right:5px;
+    display: inline-block;
+    border-radius: 4px;
+    background-color: black;
+    text-align: center;
+    vertical-align: bottom;
+    position: relative;
+}
+
+.buttons-group{
+    float: right;
+    margin: 10px;
+}

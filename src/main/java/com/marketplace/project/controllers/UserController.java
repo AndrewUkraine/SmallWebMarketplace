@@ -4,11 +4,7 @@ import com.marketplace.project.dao.jpadatarepository.*;
 import com.marketplace.project.entities.*;
 import com.marketplace.project.services.EmailService;
 import com.marketplace.project.web.dto.UserRegistrationDto;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,7 +17,7 @@ import java.io.File;
 import java.util.*;
 
 @Controller
-@RequestMapping(value = { "/registration","/update", "/email" }) //two mapping
+@RequestMapping(value = { "/registration", "/email" }) //two mapping
 public class UserController {
 
     @Autowired
@@ -95,74 +91,7 @@ public class UserController {
         return "redirect:/login?ok";
     }
 
-    // Update User
-    @PostMapping (value = "update")
-    public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute ("user") @Valid UserRegistrationDto userupdate, BindingResult results) {
 
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-        userRepository.findById(user.getId());
-
-        User existingPhone = userRepository.findByPhone(userupdate.getPhone());
-
-        if (existingPhone!=null && !existingPhone.getId().equals(user.getId()))
-        {
-            results.rejectValue("phone", null, "You can't use this phone. There is already an account registered with that phone");
-            return "redirect:/updateUser";
-        }
-
-
-        if (!userupdate.getUpdateNewPassword().isEmpty())
-        {
-
-            if (!userupdate.getUpdateNewPassword().equals(userupdate.getMatchingPassword()))
-            {
-                results.rejectValue("updateNewPassword", null, "The password fields must match");
-                results.rejectValue("matchingPassword", null, "The password fields must match");
-                return "updateUser";
-            }
-
-            if (passwordEncoder.matches(userupdate.getPassword(), user.getPassword()))
-            {
-               user.setPassword(passwordEncoder.encode(userupdate.getUpdateNewPassword()));
-            }
-
-            else {
-                results.rejectValue("password", null, "You must confirm current password");
-                return "updateUser";
-            }
-        }
-
-        if (userupdate.getPhone().isEmpty()) {
-            results.hasErrors();
-            return "updateUser";
-        }
-
-        if (userupdate.getFirsName().isEmpty()) {
-            results.hasErrors();
-            return "updateUser";
-        }
-
-
-        if (userupdate.getSecondName().isEmpty()){
-            results.hasErrors();
-            return "updateUser";
-        }
-
-
-        if(userupdate.getCity().isEmpty()){
-            results.hasErrors();
-            return "updateUser";
-        }
-
-        user.setPhone(userupdate.getPhone());
-        user.setFirsName(userupdate.getFirsName());
-        user.setSecondName(userupdate.getSecondName());
-        user.setCity(userupdate.getCity());
-        userRepository.save(user);
-
-        return "redirect:/registration/update-user?success";
-    }
 
     //Get User by Id
     @GetMapping(value = "/user-{id}")
@@ -170,20 +99,6 @@ public class UserController {
 
         userRepository.findById(id).ifPresent(o -> model.addAttribute("users", o));
         return "allUsers";
-    }
-
-    @GetMapping("/update-user")
-    public String updateUser(@AuthenticationPrincipal User user, @ModelAttribute UserRegistrationDto userRegistrationDto,  Model model) {
-
-        userRegistrationDto.setFirsName(user.getFirsName());
-        userRegistrationDto.setSecondName(user.getSecondName());
-        userRegistrationDto.setCity(user.getCity());
-        userRegistrationDto.setPassword(user.getPassword());
-        userRegistrationDto.setEmail(user.getEmail());
-        userRegistrationDto.setPhone(user.getPhone());
-
-        model.addAttribute("user", userRegistrationDto);
-        return "updateUser";
     }
 
     //get All users +++
