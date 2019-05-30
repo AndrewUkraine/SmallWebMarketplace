@@ -73,8 +73,8 @@ public class UpdateEmailController {
         }
 
         //if user have token already we delete this token
-        else if (user.getEmailToken()!=null){
-            EmailToken token = emailTokenRepository.findByToken(user.getEmailToken().getToken());
+        else if (emailTokenRepository.findAllByUser(user.getId())!=null){
+            EmailToken token = emailTokenRepository.findAllByUser(user.getId());
             emailTokenRepository.delete(token);
         }
 
@@ -100,6 +100,6 @@ public class UpdateEmailController {
         emailService.sendEmail(mail);
 
 
-        return "redirect:/logout";
+        return "redirect:/login?emailSuc";
     }
 }

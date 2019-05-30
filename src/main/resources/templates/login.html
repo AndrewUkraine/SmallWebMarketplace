@@ -28,6 +28,13 @@
                                 </div>
                             </div>
 
+                            <div th:if="${param.emailSuc}">
+                                <div class="alert alert-info">
+                                   New confirmation was sent to new email.
+                                    <br>  Please, check new email confirmation. </br>
+                                </div>
+                            </div>
+
                             <div th:if="${param.ok}">
                                 <div class="alert alert-info">
                                    Confirm youre account via email.

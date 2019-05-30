@@ -68,8 +68,8 @@
 
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-block">Update</button>
-                                    <button type="reset" class="btn btn-success btn-block">Cancel</button>
+                                    <button type="submit" id = "id" onclick="this.disabled=true; this.value='Submitting...'; this.form.submit();" class="btn btn-success btn-block">Update</button>
+                                    <button type="reset" id = "id2" class="btn btn-success btn-block">Cancel</button>
                                 </div>
                             </form>
 
@@ -92,6 +92,16 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <script src="http://localhost:8080/static/js/checkPasswordMatchJS.js"></script>
+
+<script>
+
+    $('#id').on('click', function() {
+        $("#email-new").prop("disabled", true);
+        $("#id2").prop("disabled", true);
+        document.getElementById("id").innerHTML="Sending...";
+    });
+
+</script>
 
 </body>
 </html>

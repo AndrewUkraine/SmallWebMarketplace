@@ -10,6 +10,10 @@ public interface EmailTokenRepository extends JpaRepository<EmailToken, Long> {
 
     EmailToken findByToken(String token);
 
+
+    @Query(value = "SELECT * FROM email_token WHERE id = ?", nativeQuery = true)
+    EmailToken findByTokenId(Integer tokenId);
+
     @Query(value = "SELECT * FROM email_token WHERE user_id = ?", nativeQuery = true)
     EmailToken findAllByUser(Integer userId);
 
