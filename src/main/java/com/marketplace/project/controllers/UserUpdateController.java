@@ -45,6 +45,7 @@ public class UserUpdateController {
         userRegistrationDto.setPassword(user.getPassword());
         userRegistrationDto.setEmail(user.getEmail());
         userRegistrationDto.setPhone(user.getPhone());
+        userRegistrationDto.setUserAvatar(user.getUserAvatar());
 
         //model.addAttribute("user", userRegistrationDto);
         return userRegistrationDto;

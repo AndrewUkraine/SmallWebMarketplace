@@ -17,7 +17,16 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="text-center">
-                        <h3><i class="glyphicon glyphicon-user" style="font-size:2em;"></i></h3>
+
+                            <span th:if="${updateUser.getUserAvatar()==null}">
+                            <h3><i class="glyphicon glyphicon-user" style="font-size:2em;"></i></h3>
+                            </span>
+
+                        <span th:if="${updateUser.getUserAvatar()!=null}">
+                        <img class="avatar" th:src="@{'/static/avatar/' + ${updateUser.getUserAvatar().getName()}}" alt="user photo">
+                        </span>
+
+
                         <h2 class="text-center">Update Profile</h2>
                         <div class="panel-body">
 
@@ -34,6 +43,19 @@
                             <!--</div>-->
 
                             <form th:action="@{/update-user}" th:object="${updateUser}" method="post">
+
+
+                                <!--<div class="avatar">-->
+                                    <!--<img th:src="@{'/static/avatar/' + ${updateUser.getUserAvatar().getName()}}" alt="user photo">-->
+                                <!--</div>-->
+
+
+                                <!--<p th:each="photo : ${updateUser.getUserAvatar().getName()}">-->
+                                        <!--<a class="avatar">-->
+                                            <!--<img th:src="@{'/static/avatar/' + ${photo}}"-->
+                                                 <!--alt="user photo"/>-->
+                                        <!--</a>-->
+                                <!--</p>-->
 
                                 <!--<p class="error-message"-->
                                    <!--th:if="${#fields.hasGlobalErrors()}"-->

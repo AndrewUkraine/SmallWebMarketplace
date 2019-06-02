@@ -52,6 +52,9 @@ public class OfferController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    @Value("${upload.pathForAvatar}")
+    private String uploadPathForAvatar;
+
 
     //delete Offer by Id
    // @ResponseBody - get JSON if REST
@@ -108,16 +111,6 @@ public class OfferController {
 
         StringBuilder fileNames = new StringBuilder();
 
-        //List<Image> images = imageRepository.findAllByImageOffer(offer.getId());
-//
-//        int size= files.size() + offer.getImages().size();
-//        //offer.getImages().size()
-//        if (files.size()>5 || images.size()>5 || size>5)
-//        {
-//          model.addAttribute("total", "You can't upload more then 5 photos. Now you are trying save " + files.size() + " but alredy have " + images.size() + " Total " + size);
-//          return "excaption";
-//
-//        }
                 for (MultipartFile file : files) {
                     if (!file.isEmpty() && file.getOriginalFilename()!=null && file.getContentType().equals("image/jpeg")) {
                         String uuidFile = UUID.randomUUID().toString();
@@ -143,8 +136,6 @@ public class OfferController {
 
                     }
             }
-
-       // model.addAttribute("msg", "Successfully uploaded files "+fileNames.toString());
 
             return "redirect:/offers";
     }

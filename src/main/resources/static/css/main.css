@@ -123,3 +123,8 @@ h1 {
     float: right;
     margin: 10px;
 }
+
+.avatar {
+    border-radius: 50%;
+    width:200px
+}

@@ -1,6 +1,7 @@
 package com.marketplace.project.web.dto;
 
 import com.marketplace.project.constraint.FieldMatch;
+import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.enums.RoleType;
 
 
@@ -65,6 +66,10 @@ public class UserRegistrationDto {
 
     @AssertTrue (message = "Please, read and be agree with our conditions")
     private Boolean terms;
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    private Image userAvatar;
+
 
     @PrePersist
     protected void onCreate() {
@@ -178,6 +183,14 @@ public class UserRegistrationDto {
 
     public void setUpdateNewPassword(String updateNewPassword) {
         this.updateNewPassword = updateNewPassword;
+    }
+
+    public Image getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(Image userAvatar) {
+        this.userAvatar = userAvatar;
     }
 
 }

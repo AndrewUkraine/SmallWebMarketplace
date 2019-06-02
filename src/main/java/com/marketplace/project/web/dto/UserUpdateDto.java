@@ -1,6 +1,7 @@
 package com.marketplace.project.web.dto;
 
 import com.marketplace.project.constraint.FieldMatch;
+import com.marketplace.project.entities.Image;
 import com.marketplace.project.entities.enums.RoleType;
 
 import javax.persistence.*;
@@ -38,6 +39,8 @@ public class UserUpdateDto {
     @NotBlank(message = "Must by not empty")
     private String city;
 
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    private Image userAvatar;
 
     @Column(name = "updatedTime")
     private Date updated;
@@ -111,6 +114,14 @@ public class UserUpdateDto {
 
     public void setMatchingPassword(String matchingPassword) {
         this.matchingPassword = matchingPassword;
+    }
+
+    public Image getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(Image userAvatar) {
+        this.userAvatar = userAvatar;
     }
 
 }

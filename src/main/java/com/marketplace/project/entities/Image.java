@@ -15,14 +15,15 @@ public class Image {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "MAIN_FOTO")
-    private boolean activFoto;
-
     @Lob
     private byte[] data;
 
     @ManyToOne
     private Offer imageOffer;
+
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
     public Image() {
     }
@@ -68,11 +69,11 @@ public class Image {
         this.data = data;
     }
 
-    public boolean isActivFoto() {
-        return activFoto;
+    public User getUser() {
+        return user;
     }
 
-    public void setActivFoto(boolean activFoto) {
-        this.activFoto = activFoto;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

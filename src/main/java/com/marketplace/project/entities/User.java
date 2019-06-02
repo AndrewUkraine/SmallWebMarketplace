@@ -8,13 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
@@ -55,7 +52,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<RoleType> roles;
 
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "seller", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     @BatchSize(size = 200) //get results partly (200)
     private List<Offer> sellList;
@@ -63,6 +59,8 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Offer> purchasedItems;
 
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    private Image userAvatar;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     private PasswordResetToken passwordResetToken;
@@ -248,5 +246,13 @@ public class User implements UserDetails {
 
     public void setEmailToken(EmailToken emailToken) {
         this.emailToken = emailToken;
+    }
+
+    public Image getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(Image userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

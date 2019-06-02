@@ -3,6 +3,7 @@ package com.marketplace.project.controllers;
 import com.marketplace.project.dao.jpadatarepository.*;
 import com.marketplace.project.entities.*;
 import com.marketplace.project.services.EmailService;
+import com.marketplace.project.services.ImageService;
 import com.marketplace.project.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -34,6 +37,9 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ImageService imageService;
+
 
     @ModelAttribute("user")
     public Model registration(Model model) {
@@ -48,7 +54,7 @@ public class UserController {
     //SaveUser
     @PostMapping
     @Transactional
-    public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result, HttpServletRequest request) {
+    public String addNewUser(@ModelAttribute ("user") @Valid UserRegistrationDto user, BindingResult result, HttpServletRequest request, @RequestParam("file") MultipartFile file) {
 
         User existingEmail = userRepository.findByEmail(user.getEmail());
 
@@ -66,6 +72,12 @@ public class UserController {
         }
 
         User userForToken = userRepositoryDto.saveNewUser(user);
+
+        try {
+            imageService.saveAvatar(file, userForToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         EmailToken token = new EmailToken();
         token.setToken(UUID.randomUUID().toString());
