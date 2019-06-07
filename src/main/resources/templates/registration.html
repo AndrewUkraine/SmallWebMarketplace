@@ -22,11 +22,26 @@
                         <form th:action="@{/registration}" th:object="${user}" enctype="multipart/form-data" method="post">
 
 
-                            <a class="forfoto">
+                            <div class="photo">
+                                <a class="forfoto">
                                 <input type="file" style="display: none" name="file" id="upload" accept=".png, .jpg, .jpeg" alt="imageAvatar"/>
-                                <label  class="button"  for="upload">Add your foto</label>
-                            </a>
-                            <button style="position: inherit" id="clear" class="hidden">Clear</button>
+                                </a>
+
+                                <div>
+                                    <a class="pic-ava">
+                                <label   href="#" class="button-2"  for="upload">Add profile photo</label>
+                                    <button  id="clear" class="hidden">Clear</button>
+                                    </a>
+                                    <div>
+
+                                        <div>
+                                            <div>
+
+
+
+
+
+
 
                             <div th:if="${param.success}">
                                 <div class="alert alert-info">
