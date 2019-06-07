@@ -149,7 +149,7 @@ body {
 }
 
 .photo {
-    height: 300px;
+    height: 250px;
 }
 
 .button-2 {
@@ -170,6 +170,17 @@ body {
     text-decoration: underline;
 } /* Добавляем подчеркивание */
 
+button {
+    background-color: white;
+    color: #98907C;
+    border: none
+
+}
+
+button:hover {
+    color: green; /* Цвет ссылки при наведении на нее курсора мыши */
+    text-decoration: underline;
+} /* Добавляем подчеркивание */
    
 
 

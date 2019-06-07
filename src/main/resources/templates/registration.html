@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -19,191 +19,185 @@
                     <div class="text-center">
 
 
-                        <form th:action="@{/registration}" th:object="${user}" enctype="multipart/form-data" method="post">
+                        <form th:action="@{/registration}" th:object="${user}" enctype="multipart/form-data"
+                              method="post">
 
 
                             <div class="photo">
                                 <a class="forfoto">
-                                <input type="file" style="display: none" name="file" id="upload" accept=".png, .jpg, .jpeg" alt="imageAvatar"/>
+                                    <input type="file" style="display: none" name="file" id="upload"
+                                           accept=".png, .jpg, .jpeg" alt="imageAvatar"/>
                                 </a>
 
-                                <div>
+                                <div class="button-2">
                                     <a class="pic-ava">
-                                <label   href="#" class="button-2"  for="upload">Add profile photo</label>
-                                    <button  id="clear" class="hidden">Clear</button>
+                                        <label  id="addavatar" for="upload">Add profile photo</label>
+                                        <button id="clear" class="hidden">Remove photo</button>
                                     </a>
-                                    <div>
-
-                                        <div>
-                                            <div>
-
-
-
-
-
-
-
-                            <div th:if="${param.success}">
-                                <div class="alert alert-info">
-                                    You've successfully registered to WebMarketPlace!
                                 </div>
                             </div>
 
 
 
-                        <h2 class="text-center">Register</h2>
-                        <div class="panel-body">
+
+                                                <div th:if="${param.success}">
+                                                    <div class="alert alert-info">
+                                                        You've successfully registered to WebMarketPlace!
+                                                    </div>
+                                                </div>
 
 
+                                                <h2 class="text-center">Register</h2>
+                                                <div class="panel-body">
 
 
-                                <p class="error-message"
-                                   th:if="${#fields.hasGlobalErrors()}"
-                                   th:each="error : ${#fields.errors('global')}"
-                                   th:text="${error}">Validation error</p>
+                                                    <p class="error-message"
+                                                       th:if="${#fields.hasGlobalErrors()}"
+                                                       th:each="error : ${#fields.errors('global')}"
+                                                       th:text="${error}">Validation error</p>
 
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('firsName')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('firsName')}? 'has-error':''">
+                                                        <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-user color-blue"></i>
                                         </span>
-                                        <input id="firsName"
-                                               class="form-control"
-                                               placeholder="First name"
-                                               th:field="*{firsName}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('firsName')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="firsName"
+                                                                   class="form-control"
+                                                                   placeholder="First name"
+                                                                   th:field="*{firsName}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('firsName')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('secondName')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('secondName')}? 'has-error':''">
+                                                        <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-user color-blue"></i>
                                         </span>
-                                        <input id="secondName"
-                                               class="form-control"
-                                               placeholder="Last name"
-                                               th:field="*{secondName}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('secondName')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="secondName"
+                                                                   class="form-control"
+                                                                   placeholder="Last name"
+                                                                   th:field="*{secondName}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('secondName')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">@</span>
-                                        <input id="email"
-                                               class="form-control"
-                                               placeholder="e-mail"
-                                               th:field="*{email}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('email')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">@</span>
+                                                            <input id="email"
+                                                                   class="form-control"
+                                                                   placeholder="e-mail"
+                                                                   th:field="*{email}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('email')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                                                        <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-lock"></i>
                                         </span>
-                                        <input id="password"
-                                               class="form-control"
-                                               placeholder="password"
-                                               type="password"
-                                               th:field="*{password}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('password')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="password"
+                                                                   class="form-control"
+                                                                   placeholder="password"
+                                                                   type="password"
+                                                                   th:field="*{password}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('password')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('matchingPassword')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('matchingPassword')}? 'has-error':''">
+                                                        <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-lock"></i>
                                         </span>
-                                        <input id="matchingPassword"
-                                               class="form-control"
-                                               type="password"
-                                               placeholder="Confirm password"
-                                               th:field="*{matchingPassword}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('matchingPassword')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="matchingPassword"
+                                                                   class="form-control"
+                                                                   type="password"
+                                                                   placeholder="Confirm password"
+                                                                   th:field="*{matchingPassword}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('matchingPassword')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('phone')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('phone')}? 'has-error':''">
+                                                        <div class="input-group">
                                          <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-phone color-blue"></i>
                                         </span>
-                                        <input id="phone"
-                                               class="form-control"
-                                               placeholder="phone"
-                                               th:field="*{phone}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('phone')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="phone"
+                                                                   class="form-control"
+                                                                   placeholder="phone"
+                                                                   th:field="*{phone}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('phone')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('city')}? 'has-error':''">
-                                    <div class="input-group">
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('city')}? 'has-error':''">
+                                                        <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="glyphicon glyphicon-home color-blue"></i>
                                         </span>
-                                        <input id="city"
-                                               class="form-control"
-                                               placeholder="city"
-                                               th:field="*{city}"/>
-                                    </div>
-                                    <p class="error-message"
-                                       th:each="error: ${#fields.errors('city')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
+                                                            <input id="city"
+                                                                   class="form-control"
+                                                                   placeholder="city"
+                                                                   th:field="*{city}"/>
+                                                        </div>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('city')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
 
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
+                                                        <input id="terms"
+                                                               type="checkbox"
+                                                               th:field="*{terms}"/>  
+                                                        <label class="control-label" for="terms">
+                                                            I agree with the <a href="#">terms and conditions</a> for
+                                                            Registration.
+                                                        </label>
+                                                        <p class="error-message"
+                                                           th:each="error : ${#fields.errors('terms')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
 
-                                <div class="form-group"
-                                     th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
-                                    <input id="terms"
-                                           type="checkbox"
-                                           th:field="*{terms}"/>  
-                                    <label class="control-label" for="terms">
-                                        I agree with the <a href="#">terms and conditions</a> for Registration.
-                                    </label>
-                                    <p class="error-message"
-                                       th:each="error : ${#fields.errors('terms')}"
-                                       th:text="${error}">Validation error</p>
-                                </div>
 
+                                                    <div class="form-group">
+                                                        <button type="submit" id="id"
+                                                                onclick="this.disabled=true; this.value='Submitting...'; this.form.submit();"
+                                                                class="btn btn-success btn-block">Register
+                                                        </button>
+                                                    </div>
 
-                                <div class="form-group">
-                                    <button type="submit" id = "id" onclick="this.disabled=true; this.value='Submitting...'; this.form.submit();" class="btn btn-success btn-block">Register</button>
-                                </div>
-
-                        </div>
-
+                                                </div>
                         </form>
 
 
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     Already registered? <a href="/" th:href="@{/login}">Login</a>
@@ -217,7 +211,6 @@
 </div>
 
 
-
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
@@ -229,15 +222,17 @@
 
         if (this.files && this.files[0]) {
             var reader = new FileReader();
-            $(reader).load(function(e) {
+            $(reader).load(function (e) {
                 //we refer to our style and changing there one url to another url
                 document.querySelector(".forfoto").style.backgroundImage = "url(" + e.target.result + ")";
                 //show our buttom for delet avatar
                 $('#clear').removeClass('hidden');
+                $('#addavatar').addClass('hidden');
             });
             reader.readAsDataURL(this.files[0]);
         }
     }
+
     $("#upload").change(readURL);
 
 
@@ -245,18 +240,17 @@
     var control = $("#control");
 
     $("#clear").on("click", function () {
-        control.replaceWith( control = control.clone( true ) );
-        document.getElementById('clear').style.visibility= "none";
+        control.replaceWith(control = control.clone(true));
+        document.getElementById('clear').style.visibility = "none";
     });
 
 
-    </script>
-
+</script>
 
 
 <script>
 
-    $('#id').on('click', function() {
+    $('#id').on('click', function () {
         $("#firsName").prop("disabled", true);
         $("#secondName").prop("disabled", true);
         $("#email").prop("disabled", true);
@@ -265,7 +259,7 @@
         $("#phone").prop("disabled", true);
         $("#city").prop("disabled", true);
         $("#terms").prop("disabled", true);
-        document.getElementById("id").innerHTML="Sending...";
+        document.getElementById("id").innerHTML = "Sending...";
     });
 
 </script>
